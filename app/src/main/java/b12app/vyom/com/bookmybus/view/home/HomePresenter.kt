@@ -21,11 +21,12 @@ class HomePresenter(homeActivity: HomeActivity) {
     var homeActivity: HomeActivity? = homeActivity
     var city:List<City.CityBean>?=null
     var adapter:ArrayAdapter<String>?=null
-    var trie:Trie= Trie()
+    var autoComplete:ArrayList<City.CityBean>?=null
+    var trie:Trie<City.CityBean>
     fun setSearchView() {
         homeActivity!!.list_view.setOnItemClickListener(object : AdapterView.OnItemClickListener {
             override fun onItemClick(adapterView: AdapterView<*>, view: View, i: Int, l: Long) {
-                Toast.makeText(homeActivity, i.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(homeActivity, autoComplete?.get(i)?.cityname, Toast.LENGTH_SHORT).show()
             }
         })
         homeActivity!!.list_view.setTextFilterEnabled(true);
@@ -37,12 +38,16 @@ class HomePresenter(homeActivity: HomeActivity) {
             }
             override fun onQueryTextChange(newText: String): Boolean {
                 if(newText.length>0){
-                    var autoComplete=trie.getWordsForPrefix(trie.root,newText)
+                    autoComplete=trie.getWordsForPrefix(trie.root,newText)
                     if(autoComplete==null){
                         adapter?.clear()
                         return false
                     }
-                    adapter=ArrayAdapter<String>(homeActivity,android.R.layout.simple_list_item_1,autoComplete)
+                    var autoStringList=ArrayList<String>()
+                    for(city:City.CityBean in autoComplete!!){
+                        city.cityname?.let { autoStringList.add(it) }
+                    }
+                    adapter=ArrayAdapter<String>(homeActivity,android.R.layout.simple_list_item_1,autoStringList)
                     homeActivity!!.list_view.setAdapter(adapter)
                     return true
                 }
@@ -56,7 +61,7 @@ class HomePresenter(homeActivity: HomeActivity) {
     }
 
     fun requestCities(){
-        var retrofit=RetrofitInstance.getRetrofitInstance()
+        val retrofit=RetrofitInstance.getRetrofitInstance()
         var callback=retrofit!!.create(SearchBusAPI::class.java).getCity()
         callback.enqueue(object :Callback<City> {
             override fun onFailure(call: Call<City>?, t: Throwable?) {
@@ -65,7 +70,7 @@ class HomePresenter(homeActivity: HomeActivity) {
             override fun onResponse(call:Call<City>, response: Response<City>) {
                 city=response.body()!!.getCity()
                 for(cityBean : City.CityBean in city!!){
-                    trie.insert(cityBean)
+                    trie.insert(cityBean,cityBean.cityname!!)
                 }
            }
        })
