@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">BookMyBus</string>
     <string name="title_activity_home">ActivityHome</string>
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
+    <string name="login">Login</string>
 </resources>
