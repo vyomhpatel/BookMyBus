@@ -25,26 +25,29 @@ class HomePresenter(homeActivity: HomeActivity) {
     fun setSearchView() {
         homeActivity!!.list_view.setOnItemClickListener(object : AdapterView.OnItemClickListener {
             override fun onItemClick(adapterView: AdapterView<*>, view: View, i: Int, l: Long) {
-                Toast.makeText(homeActivity, i, Toast.LENGTH_SHORT).show()
+                Toast.makeText(homeActivity, i.toString(), Toast.LENGTH_SHORT).show()
             }
         })
         homeActivity!!.list_view.setTextFilterEnabled(true);
         homeActivity!!.startLocation.setIconifiedByDefault(false); //直接显示搜索框，不隐藏
         homeActivity!!.startLocation.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-
+                Toast.makeText(homeActivity,query,Toast.LENGTH_LONG).show()
                 return false
             }
-
             override fun onQueryTextChange(newText: String): Boolean {
                 if(newText.length>0){
                     var autoComplete=trie.getWordsForPrefix(trie.root,newText)
+                    if(autoComplete==null){
+                        adapter?.clear()
+                        return false
+                    }
                     adapter=ArrayAdapter<String>(homeActivity,android.R.layout.simple_list_item_1,autoComplete)
                     homeActivity!!.list_view.setAdapter(adapter)
                     return true
                 }
                 else{
-                    adapter!!.clear()
+                    adapter?.clear()
                 }
                 return false
             }
@@ -75,5 +78,6 @@ class HomePresenter(homeActivity: HomeActivity) {
         trie = Trie()
         requestCities()
         setSearchView()
+
     }
 }

@@ -13,7 +13,6 @@
         android:iconifiedByDefault="true"
         android:inputType="textCapWords"
         android:imeOptions="actionSearch"
-        android:queryHint=""
         />
     <ListView
         android:id="@+id/list_view"
