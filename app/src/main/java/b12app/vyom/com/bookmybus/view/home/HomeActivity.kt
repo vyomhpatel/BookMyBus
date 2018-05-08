@@ -27,10 +27,10 @@ class HomeActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
         initDraw()
         var homePresenter=HomePresenter(this)
 //        homePresenter.requestCities()
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
+//        fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                    .setAction("Action", null).show()
+//        }
     }
 
     fun initDraw(){

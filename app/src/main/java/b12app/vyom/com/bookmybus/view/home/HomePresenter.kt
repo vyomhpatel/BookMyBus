@@ -1,6 +1,7 @@
 package b12app.vyom.com.bookmybus.view.home
 
 
+import android.app.DatePickerDialog
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -15,6 +16,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.widget.Toast
 import android.widget.AdapterView
+import java.util.*
 
 
 class HomePresenter(homeActivity: HomeActivity) {
@@ -23,15 +25,28 @@ class HomePresenter(homeActivity: HomeActivity) {
     var adapter:ArrayAdapter<String>?=null
     var autoComplete:ArrayList<City.CityBean>?=null
     var trie:Trie<City.CityBean>
+    var startLocation:City.CityBean?=null
+    var endLocation:City.CityBean?=null
+    var flag=true
+
     fun setSearchView() {
+        homeActivity!!.searchLocation.clearFocus()
         homeActivity!!.list_view.setOnItemClickListener(object : AdapterView.OnItemClickListener {
             override fun onItemClick(adapterView: AdapterView<*>, view: View, i: Int, l: Long) {
-                Toast.makeText(homeActivity, autoComplete?.get(i)?.cityname, Toast.LENGTH_SHORT).show()
+                if(flag){
+                    startLocation=autoComplete?.get(i)
+                    homeActivity!!.start.text=startLocation?.cityname
+                }else{
+                    endLocation=autoComplete?.get(i)
+                    homeActivity!!.end.text=endLocation?.cityname
+                }
+                homeActivity!!.searchLocation.clearFocus();
+                homeActivity!!.searchLocation.setQuery("",false);
             }
         })
-        homeActivity!!.list_view.setTextFilterEnabled(true);
-        homeActivity!!.startLocation.setIconifiedByDefault(false); //直接显示搜索框，不隐藏
-        homeActivity!!.startLocation.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//        homeActivity!!.list_view.setTextFilterEnabled(true);
+        homeActivity!!.searchLocation.setIconifiedByDefault(true); //直接显示搜索框，不隐藏
+        homeActivity!!.searchLocation.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 Toast.makeText(homeActivity,query,Toast.LENGTH_LONG).show()
                 return false
@@ -43,7 +58,7 @@ class HomePresenter(homeActivity: HomeActivity) {
                         adapter?.clear()
                         return false
                     }
-                    var autoStringList=ArrayList<String>()
+                    val autoStringList=ArrayList<String>()
                     for(city:City.CityBean in autoComplete!!){
                         city.cityname?.let { autoStringList.add(it) }
                     }
@@ -57,6 +72,16 @@ class HomePresenter(homeActivity: HomeActivity) {
                 return false
             }
         })
+//        homeActivity!!.swithLocation.setOnClickListener(object :View.OnClickListener{
+//            override fun onClick(v: View?) {
+//                //swap location
+//                val tempCity=startLocation
+//                startLocation=endLocation
+//                endLocation=tempCity
+//                homeActivity!!.start.text=startLocation?.cityname
+//                homeActivity!!.end.text=endLocation?.cityname
+//            }
+//        })
 
     }
 
@@ -83,6 +108,30 @@ class HomePresenter(homeActivity: HomeActivity) {
         trie = Trie()
         requestCities()
         setSearchView()
+        setDatePicker()
+    }
 
+    fun setDatePicker(){
+        var calendar= Calendar.getInstance()
+        homeActivity!!.stareDate.setOnClickListener(object :View.OnClickListener{
+            override fun onClick(v: View?) {
+                DatePickerDialog(homeActivity, DatePickerDialog.OnDateSetListener {
+                    view, year, monthOfYear, dayOfMonth ->
+                    homeActivity!!.stareDate.text= ((monthOfYear + 1).toString() +"-"+ dayOfMonth + "-" +year.toString() )
+                    flag=true
+                    homeActivity!!.searchLocation.requestFocus()
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
+            }
+        })
+        homeActivity!!.endDate.setOnClickListener(object :View.OnClickListener{
+            override fun onClick(v: View?) {
+                DatePickerDialog(homeActivity, DatePickerDialog.OnDateSetListener {
+                    view, year, monthOfYear, dayOfMonth ->
+                    homeActivity!!.endDate.text=((monthOfYear + 1).toString() + "-" + dayOfMonth+'-'+year.toString())
+                    flag=false
+                    homeActivity!!.searchLocation.requestFocus()
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH+1), calendar.get(Calendar.DAY_OF_MONTH)).show()
+            }
+        })
     }
 }
