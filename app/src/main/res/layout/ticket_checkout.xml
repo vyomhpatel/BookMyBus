@@ -30,7 +30,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tvIBMonth"
+                    android:id="@+id/tvCheckIBMonth"
                     android:text="November"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_reg"
@@ -39,7 +39,7 @@
                     android:layout_width="50dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center_horizontal"
-                    android:id="@+id/tvIBDate"
+                    android:id="@+id/tvCheckIBDate"
                     android:text="25"
                     android:textColor="#26a69a"
                     android:textStyle="bold"
@@ -79,21 +79,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_reg"
-                    android:id="@+id/tvIBDeparture"
+                    android:id="@+id/tvCheckIBDeparture"
                     android:text="09:00 PM"
                     android:textColor="#000000" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_reg"
-                    android:id="@+id/tvIBArrival"
+                    android:id="@+id/tvCheckIBArrival"
                     android:text="11:00 PM"
                     android:textColor="#000000" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_reg"
-                    android:id="@+id/tvIBDuration"
+                    android:id="@+id/tvCheckIBDuration"
                     android:text="02:00 HR"
                     android:textColor="#000000" />
             </LinearLayout>
@@ -120,7 +120,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tvOBMonth"
+                    android:id="@+id/tvCheckOBMonth"
                     android:text="November"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_reg"
@@ -129,7 +129,7 @@
                     android:layout_width="50dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center_horizontal"
-                    android:id="@+id/tvOBDate"
+                    android:id="@+id/tvCheckOBDate"
                     android:text="26"
                     android:textColor="#26a69a"
                     android:textStyle="bold"
@@ -169,21 +169,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_reg"
-                    android:id="@+id/tvOBDeparture"
+                    android:id="@+id/tvCheckOBDeparture"
                     android:text="09:00 PM"
                     android:textColor="#000000" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_reg"
-                    android:id="@+id/tvOBArrival"
+                    android:id="@+id/tvCheckOBArrival"
                     android:text="11:00 PM"
                     android:textColor="#000000" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_reg"
-                    android:id="@+id/tvOBDuration"
+                    android:id="@+id/tvCheckOBDuration"
                     android:text="02:00 HR"
                     android:textColor="#000000" />
             </LinearLayout>
@@ -221,40 +221,9 @@
                     android:textColor="#000000"
                     android:gravity="center_vertical"
                     android:textSize="@dimen/text_reg"
-                    android:id="@+id/etTotalNotax"
+                    android:id="@+id/etCheckTotalNotax"
                     android:background="@drawable/button_bg"
                     android:text="₹ 50" />
-
-
-            </TableRow>
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="5dp"
-                android:weightSum="2">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:textSize="@dimen/text_reg"
-                    android:textColor="#000000"
-                    android:layout_weight="1"
-                    android:text="Delivery Charges"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="10dp"
-                    android:paddingLeft="10dp"
-                    android:textColor="#000000"
-                    android:gravity="center_vertical"
-                    android:textSize="@dimen/text_reg"
-                    android:id="@+id/etDelivery"
-                    android:background="@drawable/button_bg"
-                    android:text="₹ 50" />
-
             </TableRow>
             <TableRow
                 android:layout_width="match_parent"
@@ -291,7 +260,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
             android:layout_marginBottom="40dp"
             android:layout_margin="10dp"
             android:background="@drawable/rounded_border">
