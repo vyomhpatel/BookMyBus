@@ -17,9 +17,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.widget.Toast
 import android.widget.AdapterView
-import b12app.vyom.com.bookmybus.model.Route
-import b12app.vyom.com.bookmybus.utils.ID
-import b12app.vyom.com.bookmybus.view.facerecognition.FaceRecognition
+import b12app.vyom.com.bookmybus.utils.ENDLatitude
+import b12app.vyom.com.bookmybus.utils.ENDLongitude
+import b12app.vyom.com.bookmybus.utils.STARTLatitude
+import b12app.vyom.com.bookmybus.utils.STARTLongitude
+import b12app.vyom.com.bookmybus.view.Routes.RoutesActivity
 import java.util.*
 
 
@@ -117,23 +119,12 @@ class HomePresenter(homeActivity: HomeActivity) {
     homeActivity.submit.setOnClickListener(object :View.OnClickListener{
         override fun onClick(v: View?) {
             if(startLocation!=null && endLocation!==null){
-                val retrofit=RetrofitInstance.getRetrofitInstance()
-                val callback =retrofit!!.create(SearchBusAPI::class.java).getRouteinfo(
-                        startLocation!!.citylatitude!!, startLocation!!.citylongtitude!!,
-                        endLocation!!.citylatitude!!, endLocation!!.citylongtitude!!
-                        )
-                callback.enqueue(object : Callback<Route> {
-                    override fun onFailure(call: Call<Route>?, t: Throwable?) {
-                        Log.i("callBack ",t.toString())
-                    }
-                    override fun onResponse(call: Call<Route>?, response: Response<Route>?) {
-                        var id=response!!.body()?.getRoute()?.get(0)?.id
-                        val intent= Intent(homeActivity,FaceRecognition::class.java)
-                        intent.putExtra(ID,id)
-                        homeActivity.startActivity(intent)
-                    }
-
-                })
+                val intent=Intent(homeActivity,RoutesActivity::class.java)
+                intent.putExtra(STARTLatitude,startLocation!!.citylatitude!!)
+                intent.putExtra(STARTLongitude,startLocation!!.citylongtitude!!)
+                intent.putExtra(ENDLatitude,endLocation!!.citylatitude!!)
+                intent.putExtra(ENDLongitude,endLocation!!.citylongtitude!!)
+                homeActivity.startActivity(intent)
             }
         }
     })

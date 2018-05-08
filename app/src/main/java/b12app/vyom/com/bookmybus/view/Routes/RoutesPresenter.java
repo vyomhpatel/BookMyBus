@@ -2,15 +2,16 @@ package b12app.vyom.com.bookmybus.view.Routes;
 
 import android.content.Context;
 
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 import b12app.vyom.com.bookmybus.model.JBusByRoute;
 import b12app.vyom.com.bookmybus.data.remote.*;
+import b12app.vyom.com.bookmybus.utils.VolleyHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RoutesPresenter implements RoutesContract.IPresenter {
+public class RoutesPresenter implements RoutesContract.IPresenter,GetIDListener {
 
     private RoutesContract.IView iView;
     private Context context;
@@ -23,12 +24,13 @@ public class RoutesPresenter implements RoutesContract.IPresenter {
         this.context = routesActivity;
         this.iView = routesActivity;
         jApiService = JRetrofitInstance.getRetrofitInstance().create(JApiService.class);
+        new VolleyHelper(routesActivity).startRequest(1,1,1,1,this);
     }
 
     @Override
-    public void getBusesForRoute() {
+    public void getBusesForRoute(String id) {
 
-        jApiService.getUser("1").enqueue(new Callback<JBusByRoute>() {
+        jApiService.getUser(id).enqueue(new Callback<JBusByRoute>() {
             @Override
             public void onResponse(Call<JBusByRoute> call, Response<JBusByRoute> response) {
 
@@ -43,5 +45,10 @@ public class RoutesPresenter implements RoutesContract.IPresenter {
             }
         });
 
+    }
+
+    @Override
+    public void getId(@NotNull String id) {
+        getBusesForRoute(id);
     }
 }
