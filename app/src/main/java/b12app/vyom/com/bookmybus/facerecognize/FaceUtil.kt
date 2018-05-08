@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.text.TextUtils
+import org.opencv.android.Utils
 import org.opencv.core.Mat
 import org.opencv.core.Rect
 import org.opencv.core.Size
@@ -13,6 +14,14 @@ import org.opencv.imgproc.Imgproc
 import org.opencv.imgproc.Imgproc.CV_COMP_CORREL
 import org.opencv.imgproc.Imgproc.CV_COMP_INTERSECT
 import java.io.File
+
+
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.MatOfFloat;
+import org.opencv.core.MatOfInt;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
 
 object FaceUtil {
 
@@ -86,42 +95,31 @@ object FaceUtil {
      * @return 相似度
      */
     fun compare(context: Context, fileName1: String, fileName2: String): Double {
-//        try {
-//            val pathFile1 = getFilePath(context, fileName1)
-//            val pathFile2 = getFilePath(context, fileName2)
-//            val image1 = cvLoadImage(pathFile1, CV_LOAD_IMAGE_GRAYSCALE)
-//            val image2 = cvLoadImage(pathFile2, CV_LOAD_IMAGE_GRAYSCALE)
-//            if (null == image1 || null == image2) {
-//                return -1.0
-//            }
-//
-//            val l_bins = 256
-//            val hist_size = intArrayOf(l_bins)
-//            val v_ranges = floatArrayOf(0f, 255f)
-//            val ranges = arrayOf(v_ranges)
-//
-//            val imageArr1 = arrayOf<Mat>(image1)
-//            val imageArr2 = arrayOf<Mat>(image2)
-//            val Histogram1 = CvHistogram.create(1, hist_size, CV_HIST_ARRAY, ranges, 1)
-//            val Histogram2 = CvHistogram.create(1, hist_size, CV_HIST_ARRAY, ranges, 1)
-//            cvCalcHist(imageArr1, Histogram1, 0, null)
-//            cvCalcHist(imageArr2, Histogram2, 0, null)
-//            cvNormalizeHist(Histogram1, 100.0)
-//            cvNormalizeHist(Histogram2, 100.0)
-//            // 参考：http://blog.csdn.net/nicebooks/article/details/8175002
-//            val c1 = cvCompareHist(Histogram1, Histogram2, CV_COMP_CORREL) * 100
-//            val c2 = cvCompareHist(Histogram1, Histogram2, CV_COMP_INTERSECT)
-//            //            Log.i(TAG, "compare: ----------------------------");
-//            //            Log.i(TAG, "compare: c1 = " + c1);
-//            //            Log.i(TAG, "compare: c2 = " + c2);
-//            //            Log.i(TAG, "compare: 平均值 = " + ((c1 + c2) / 2));
-//            //            Log.i(TAG, "compare: ----------------------------");
-//            return (c1 + c2) / 2
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            return -1.0
-//        }
-        return 0.0
+        try {
+            val pathFile1 = getFilePath(context, fileName1)
+            val pathFile2 = getFilePath(context, fileName2)
+            val mBitmap1= BitmapFactory.decodeFile(pathFile1)
+            val mBitmap2=BitmapFactory.decodeFile(pathFile2)
+            val mat1=Mat()
+            val mat2=Mat()
+            val matGrey1=Mat()
+            val matGrey2=Mat()
+            Utils.bitmapToMat(mBitmap1, mat1);
+            Utils.bitmapToMat(mBitmap2, mat2);
+            Imgproc.cvtColor(mat1, matGrey1, Imgproc.COLOR_BGR2GRAY);
+            Imgproc.cvtColor(mat2, matGrey2, Imgproc.COLOR_BGR2GRAY);
+            return comPareHist(matGrey1, matGrey2);
+
+        }catch (e: Exception) {
+            e.printStackTrace()
+            return -1.0
+        }
+    }
+
+    private fun comPareHist(matGrey1: Mat, matGrey2: Mat): Double {
+        matGrey1.convertTo(matGrey1,CvType.CV_32F)
+        matGrey2.convertTo(matGrey2,CvType.CV_32F)
+        return Imgproc.compareHist(matGrey1,matGrey2,Imgproc.CV_COMP_CORREL)
     }
 
     /**

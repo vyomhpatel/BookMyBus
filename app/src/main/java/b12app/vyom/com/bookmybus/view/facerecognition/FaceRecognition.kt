@@ -120,7 +120,7 @@ class FaceRecognition : AppCompatActivity(), OnFaceDetectorListener {
                 } else {
                     face2?.setImageBitmap(mBitmapFace2)
                 }
-                samilarity?.setText(String.format("samilarity :  %.2f", cmp) + "%")
+                samilarity?.setText(String.format("samilarity :  %.2f", cmp*100) + "%")
             }
 
             isGettingFace = false
