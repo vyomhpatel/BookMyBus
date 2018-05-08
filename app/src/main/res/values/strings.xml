@@ -14,4 +14,24 @@
     <string name="take_photo">take photo</string>
     <string name="goto_main">goto main</string>
     <string name="samilarity">samilarity:</string>
+    <string name="departure">Departure:</string>
+    <string name="arrival">Arrival:</string>
+    <string name="duration">Duration:</string>
+    <string name="passenger_details">PASSENGER DETAILS</string>
+    <string name="ticket_details">TICKET DETAILS</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="mail_from_username">vyomhpatel@gmail.com</string>
+    <string name="mail_from_p">WelcomeVyom</string>
+    <string name="outbound">OUTBOUND</string>
+    <string name="recipient">mr.vyompatel@gmail.com</string>
+    <string name="mail_msg">You have been Confirmed for the Journey.</string>
+    <string name="mail_sub">Ticket Confirmation For BookMyBus</string>
+    <string name="googlepay_status_unavailable" translatable="false">Unfortunately, Google Pay is not available on this phone.</string>
+    <string name="googlepay_status_checking" translatable="false">Checking if Google Pay is available...</string>
+    <string name="payments_show_name" translatable="false">Successfully received payment data for %s!</string>
+    <string name="confirm">Confirm</string>
+    <string name="copyright">All rights reserved by © BookMyBus</string>
+    <string name="seats">Seats</string>
 </resources>
