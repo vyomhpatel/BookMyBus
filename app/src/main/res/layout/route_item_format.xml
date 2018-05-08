@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp"
+    android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+<LinearLayout
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:textSize="@dimen/dimen_lbl"
+        android:id="@+id/busId"
+        android:text="TC102"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="#546e7a"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:orientation="horizontal">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvDeparture"
+        android:textSize="@dimen/txt18"
+        android:textStyle="bold"
+        android:textColor="@color/txtBlack"
+        android:text="09:00 PM"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="-"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvArrival"
+        android:textSize="@dimen/txt18"
+        android:layout_marginLeft="5dp"
+        android:text="11:00 PM"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:lines="1"
+        android:textSize="14sp"
+        android:id="@+id/tvBusDesc"
+        android:text="The Bio-Research Shuttle is an on-demand service intended for the transportation of passengers with bio-research materials only. Service is provided by a University of Michigan van Monday-Friday year round from 8:00 AM to 5:15 PM, with a service break from 12:00 PM to 12:30 PM."/>
+</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dimen_lbl"
+            android:id="@+id/tvJourneyHs"
+            android:layout_marginLeft="5dp"
+            android:text="(2:00 hrs)"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_marginRight="5dp"
+            android:background="#546e7a"/>
+
+        <TextView
+            android:id="@+id/tvTicketPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$800"
+            android:textColor="#00897b"
+            android:textSize="@dimen/dimen_lbl"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/txt15"
+            android:text="@string/seats"/>
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvAvailableSeats"
+            android:textSize="@dimen/txt15"
+            android:gravity="center_horizontal"
+            android:text="23"/>
+    </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>
