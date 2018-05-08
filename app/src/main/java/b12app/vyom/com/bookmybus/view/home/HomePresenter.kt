@@ -2,6 +2,7 @@ package b12app.vyom.com.bookmybus.view.home
 
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -16,6 +17,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.widget.Toast
 import android.widget.AdapterView
+import b12app.vyom.com.bookmybus.model.Route
+import b12app.vyom.com.bookmybus.utils.ID
+import b12app.vyom.com.bookmybus.view.facerecognition.FaceRecognition
 import java.util.*
 
 
@@ -87,7 +91,7 @@ class HomePresenter(homeActivity: HomeActivity) {
 
     fun requestCities(){
         val retrofit=RetrofitInstance.getRetrofitInstance()
-        var callback=retrofit!!.create(SearchBusAPI::class.java).getCity()
+        val callback=retrofit!!.create(SearchBusAPI::class.java).getCity()
         callback.enqueue(object :Callback<City> {
             override fun onFailure(call: Call<City>?, t: Throwable?) {
                 Log.i("Response", t?.message);
@@ -100,15 +104,39 @@ class HomePresenter(homeActivity: HomeActivity) {
            }
        })
     }
-    companion object {
-        fun XXX(){
-        }
-    }
+//    companion object {
+//        fun XXX(){
+//        }
+//    }
     init {
         trie = Trie()
         requestCities()
         setSearchView()
         setDatePicker()
+
+    homeActivity.submit.setOnClickListener(object :View.OnClickListener{
+        override fun onClick(v: View?) {
+            if(startLocation!=null && endLocation!==null){
+                val retrofit=RetrofitInstance.getRetrofitInstance()
+                val callback =retrofit!!.create(SearchBusAPI::class.java).getRouteinfo(
+                        startLocation!!.citylatitude!!, startLocation!!.citylongtitude!!,
+                        endLocation!!.citylatitude!!, endLocation!!.citylongtitude!!
+                        )
+                callback.enqueue(object : Callback<Route> {
+                    override fun onFailure(call: Call<Route>?, t: Throwable?) {
+                        Log.i("callBack ",t.toString())
+                    }
+                    override fun onResponse(call: Call<Route>?, response: Response<Route>?) {
+                        var id=response!!.body()?.getRoute()?.get(0)?.id
+                        val intent= Intent(homeActivity,FaceRecognition::class.java)
+                        intent.putExtra(ID,id)
+                        homeActivity.startActivity(intent)
+                    }
+
+                })
+            }
+        }
+    })
     }
 
     fun setDatePicker(){

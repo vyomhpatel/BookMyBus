@@ -13,7 +13,7 @@ public interface SearchBusAPI {
     fun getCity(): Call<City>;
 
     @GET(routeinfo)
-    fun Any.getRouteinfo(@Query("route-startpoint-latitude") startLatitude: String,
+    fun getRouteinfo(@Query("route-startpoint-latitude") startLatitude: String,
                          @Query("route-startpoint-longitude") startLongituede: String,
                          @Query("route-endpoint-latitude") endLatitude: String,
                          @Query("route-endpoint-longiude") endLongitude: String): Call<Route>
