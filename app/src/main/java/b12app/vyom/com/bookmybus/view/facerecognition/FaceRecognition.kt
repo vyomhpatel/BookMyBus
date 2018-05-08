@@ -78,15 +78,6 @@ class FaceRecognition : AppCompatActivity(), OnFaceDetectorListener {
     }
 
     /**
-     * 设置应用权限
-     *
-     * @param view view
-     */
-    fun setPermissions(view: View) {
-        PermissionsManager.startAppSettings(applicationContext)
-    }
-
-    /**
      * 检测到人脸
      *
      * @param mat  Mat
