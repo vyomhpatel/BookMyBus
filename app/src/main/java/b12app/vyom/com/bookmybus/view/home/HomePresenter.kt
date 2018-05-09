@@ -21,7 +21,7 @@ import b12app.vyom.com.bookmybus.utils.ENDLatitude
 import b12app.vyom.com.bookmybus.utils.ENDLongitude
 import b12app.vyom.com.bookmybus.utils.STARTLatitude
 import b12app.vyom.com.bookmybus.utils.STARTLongitude
-import b12app.vyom.com.bookmybus.view.Routes.RoutesActivity
+import b12app.vyom.com.bookmybus.view.routes.RoutesActivity
 import java.util.*
 
 

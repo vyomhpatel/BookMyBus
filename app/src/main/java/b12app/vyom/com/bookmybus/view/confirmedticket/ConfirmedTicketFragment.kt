@@ -70,14 +70,14 @@ class ConfirmedTicketFragment : Fragment() {
 
         val tvperson = ticketConfirmedView!!.findViewById(R.id.tvPersonName) as TextView
         val ivQR = ticketConfirmedView!!.findViewById(R.id.ivQRCode) as ImageView
-        tvperson!!.text="Vyomkumar Patel"
+        tvperson.text="Vyomkumar Patel"
 
         try {
             val bitMatrix = multiFormatWriter.encode(currenttime, BarcodeFormat.QR_CODE, 200, 200)
             val barcodeEncoder = BarcodeEncoder()
             val bitmap = barcodeEncoder.createBitmap(bitMatrix)
 
-            ivQR!!.setImageBitmap(bitmap)
+            ivQR.setImageBitmap(bitmap)
             sendMessage()
             setCalenderEvent()
         } catch (e: WriterException) {

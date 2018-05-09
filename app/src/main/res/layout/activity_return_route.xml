@@ -18,9 +18,9 @@
         android:theme="?attr/actionBarTheme" />
 
     <android.support.v7.widget.RecyclerView
-      android:id="@+id/routesRecyclerView"
-     android:layout_width="match_parent"
-      android:layout_height="match_parent"
+        android:id="@+id/returnRoutesRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginBottom="10dp"
         android:orientation="vertical"
         android:padding="5dp"/>
