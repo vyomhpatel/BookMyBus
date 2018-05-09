@@ -2,7 +2,6 @@ package b12app.vyom.com.bookmybus.view.home
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
@@ -26,7 +25,7 @@ import b12app.vyom.com.bookmybus.utils.ENDLatitude
 import b12app.vyom.com.bookmybus.utils.ENDLongitude
 import b12app.vyom.com.bookmybus.utils.STARTLatitude
 import b12app.vyom.com.bookmybus.utils.STARTLongitude
-import b12app.vyom.com.bookmybus.view.Routes.RoutesActivity
+import b12app.vyom.com.bookmybus.view.routes.RoutesActivity
 
 
 class HomeActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelectedListener {
@@ -99,7 +98,7 @@ class HomeActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
     }
     fun whereYouStart(){
         TapTargetView.showFor(this, // `this` is an Activity
-                TapTarget.forView(findViewById(R.id.searchLocation), "input some place", "")
+                TapTarget.forView(findViewById(R.id.leftTop), "input some place", "")
                         // All options below are optional
                         .outerCircleColor(R.color.blue)      // Specify a color for the outer circle
                         .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle

@@ -2,6 +2,7 @@ package b12app.vyom.com.bookmybus.view.returnroute
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import b12app.vyom.com.bookmybus.R
 import b12app.vyom.com.bookmybus.adapters.RoutesAdapter
 import b12app.vyom.com.bookmybus.model.JBusByRoute
@@ -9,6 +10,7 @@ import b12app.vyom.com.bookmybus.utils.ENDLatitude
 import b12app.vyom.com.bookmybus.utils.ENDLongitude
 import b12app.vyom.com.bookmybus.utils.STARTLatitude
 import b12app.vyom.com.bookmybus.utils.STARTLongitude
+import kotlinx.android.synthetic.main.activity_journey_list.*
 import kotlinx.android.synthetic.main.activity_return_route.*
 
 class ReturnRouteActivity : AppCompatActivity(), ReturnRoutesContract.IView {
@@ -22,7 +24,7 @@ class ReturnRouteActivity : AppCompatActivity(), ReturnRoutesContract.IView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_return_route)
-
+        initToolbar()
         iPresenter = ReturnRoutesPresenter(this)
         returnStartLat = intent.getStringExtra(STARTLatitude)
         returnStartLong = intent.getStringExtra(STARTLongitude)
@@ -31,6 +33,21 @@ class ReturnRouteActivity : AppCompatActivity(), ReturnRoutesContract.IView {
         iPresenter!!.getRouteId(returnStartLat,returnStartLong,returnEndLat,returnEndLong)
 
 
+    }
+    private fun initToolbar() {
+        tbreturnRoutes!!.setNavigationIcon(R.drawable.back_ic)
+        setSupportActionBar(tbreturnRoutes)
+
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setHomeButtonEnabled(true);
+        supportActionBar!!.title = "Vadodara - Bombay"
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if(item!!.itemId==android.R.id.home){
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun initRecyclerView(businformationBeanList: List<JBusByRoute.BusinformationBean>) {

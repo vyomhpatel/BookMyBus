@@ -7,6 +7,13 @@
     android:weightSum="1"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+    <View
+        android:id="@+id/leftTop"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:visibility="invisible"/>
     <SearchView
         android:id="@+id/searchLocation"
         android:layout_width="match_parent"
@@ -16,7 +23,7 @@
         android:imeOptions="actionSearch"
         android:inputType="textCapWords"
         />
-
+    
     <ListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"

@@ -18,7 +18,7 @@ class SeatAdapter(private var states: List<Int>,val context: Context) : BaseAdap
     //should empty 2,7,12
     var seatLine=2
     //4,9,14
-    var seatEnd=4
+    var seatEnd=5
     override fun getItem(position: Int): Int {
         return 0
     }
@@ -28,14 +28,14 @@ class SeatAdapter(private var states: List<Int>,val context: Context) : BaseAdap
     }
 
     override fun getCount(): Int {
-        val plus=(states.size-seatLine)/(seatEnd+1)+1
+        val plus=(states.size-seatLine)/(seatEnd)+1
         return states.size+plus
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val index=getIndexByPosition(position)
         //if seat is in pathway, put nothing
-        if((position-seatLine)%(seatEnd+1)==0)
+        if((position-seatLine)%(seatEnd)==0)
             return View(context)
         if(index>=states.size) return View(context)
         val holder:Holder
@@ -59,7 +59,7 @@ class SeatAdapter(private var states: List<Int>,val context: Context) : BaseAdap
     }
 
     private fun getIndexByPosition(position: Int): Int {
-        var subtract=(position-seatLine)/(seatEnd+1)+1
+        var subtract=(position-seatLine)/(seatEnd)+1
         if(position<seatLine) subtract=0
         return position-subtract
     }

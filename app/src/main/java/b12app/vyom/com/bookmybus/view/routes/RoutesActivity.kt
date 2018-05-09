@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.view.MenuItem
 
 import java.util.ArrayList
 
@@ -17,16 +18,10 @@ import b12app.vyom.com.bookmybus.view.returnroute.ReturnRouteActivity
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
+import kotlinx.android.synthetic.main.activity_journey_list.*
 import kotlinx.android.synthetic.main.content_drawer.*
 
 class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
-
-    @BindView(R.id.routesRecyclerView)
-    internal var routesRecyclerView: RecyclerView? = null
-
-    @BindView(R.id.tbRoutes)
-    internal var tbRoutes: Toolbar? = null
-
 
     private var unbinder: Unbinder? = null
     private val busByRoute: JBusByRoute? = null
@@ -53,16 +48,22 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
 
         iPresenter!!.getRouteId(startLat, startLong, endLat, endLong)
         initToolbar()
-
-
     }
 
     private fun initToolbar() {
         tbRoutes!!.setNavigationIcon(R.drawable.back_ic)
         setSupportActionBar(tbRoutes)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.title = "Vadodara - Bombay"
 
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setHomeButtonEnabled(true);
+        supportActionBar!!.title = "Vadodara - Bombay"
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if(item!!.itemId==android.R.id.home){
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 
