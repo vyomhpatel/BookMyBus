@@ -1,5 +1,6 @@
 package b12app.vyom.com.bookmybus.view.Routes;
 
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,8 +47,9 @@ public class RoutesActivity extends AppCompatActivity implements RoutesContract.
         unbinder = ButterKnife.bind(this);
         iPresenter = new RoutesPresenter(this);
         businformationBeanList = new ArrayList<>();
-        iPresenter.getBusesForRoute();
 
+        String id = getIntent().getStringExtra("id");
+        iPresenter.getBusesForRoute(id);
 
         initToolbar();
 
