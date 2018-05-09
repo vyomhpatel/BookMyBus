@@ -11,7 +11,7 @@ import com.android.volley.toolbox.Volley
 import org.json.JSONObject
 
 class VolleyHelper(private val context: Context){
-        fun geti(startLatitude:Float, startLongitude:Float, endLatitude:Float,endLongitude:Float, idListener:GetIDListener){
+        fun startRequest(startLatitude:String, startLongitude:String, endLatitude:String,endLongitude:String, idListener:GetIDListener){
             var queue= Volley.newRequestQueue(context)
             val url="http://rjtmobile.com/aamir/otr/android-app/routeinfo.php?" +
                     "route-startpoint-latitude=" + startLatitude +
