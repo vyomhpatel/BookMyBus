@@ -52,7 +52,7 @@
                     android:textSize="30sp"
                     android:layout_marginEnd="20dp"
                     android:layout_gravity="end"
-                    android:text="3-6-2018"/>
+                    android:text="start date"/>
 
             </android.support.design.widget.CoordinatorLayout>
 
@@ -77,7 +77,7 @@
                     android:textSize="30sp"
                     android:layout_gravity="end"
                     android:layout_marginEnd="20dp"
-                    android:text="3-7-2018"/>
+                    android:text="back date"/>
             </android.support.design.widget.CoordinatorLayout>
 
         </LinearLayout>

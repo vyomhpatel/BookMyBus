@@ -2,6 +2,7 @@ package b12app.vyom.com.bookmybus.view.home
 
 
 import android.app.DatePickerDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.util.Log
 import android.view.View
@@ -10,19 +11,26 @@ import android.widget.SearchView
 import b12app.vyom.com.bookmybus.data.remote.RetrofitInstance
 import b12app.vyom.com.bookmybus.data.remote.SearchBusAPI
 import b12app.vyom.com.bookmybus.model.City
-import b12app.vyom.com.bookmybus.utils.dictionaryTree.Trie
+import b12app.vyom.com.bookmybus.utils.Trie
 import kotlinx.android.synthetic.main.content_drawer.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import android.widget.Toast
 import android.widget.AdapterView
+import b12app.vyom.com.bookmybus.R
 import b12app.vyom.com.bookmybus.utils.ENDLatitude
 import b12app.vyom.com.bookmybus.utils.ENDLongitude
 import b12app.vyom.com.bookmybus.utils.STARTLatitude
 import b12app.vyom.com.bookmybus.utils.STARTLongitude
 import b12app.vyom.com.bookmybus.view.Routes.RoutesActivity
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetView
 import java.util.*
+import android.graphics.drawable.Drawable
+import android.graphics.Typeface
+
+
 
 
 class HomePresenter(homeActivity: HomeActivity) {
@@ -30,7 +38,7 @@ class HomePresenter(homeActivity: HomeActivity) {
     var city:List<City.CityBean>?=null
     var adapter:ArrayAdapter<String>?=null
     var autoComplete:ArrayList<City.CityBean>?=null
-    var trie:Trie<City.CityBean>
+    var trie: Trie<City.CityBean>
     var startLocation:City.CityBean?=null
     var endLocation:City.CityBean?=null
     var flag=true
@@ -42,9 +50,11 @@ class HomePresenter(homeActivity: HomeActivity) {
                 if(flag){
                     startLocation=autoComplete?.get(i)
                     homeActivity!!.start.text=startLocation?.cityname
+                    homeActivity!!.chooseDestination()
                 }else{
                     endLocation=autoComplete?.get(i)
                     homeActivity!!.end.text=endLocation?.cityname
+                    homeActivity!!.letsGO()
                 }
                 homeActivity!!.searchLocation.clearFocus();
                 homeActivity!!.searchLocation.setQuery("",false);
@@ -106,10 +116,7 @@ class HomePresenter(homeActivity: HomeActivity) {
            }
        })
     }
-//    companion object {
-//        fun XXX(){
-//        }
-//    }
+
     init {
         trie = Trie()
         requestCities()
@@ -132,17 +139,20 @@ class HomePresenter(homeActivity: HomeActivity) {
 
     fun setDatePicker(){
         var calendar= Calendar.getInstance()
-        homeActivity!!.stareDate.setOnClickListener(object :View.OnClickListener{
+        homeActivity!!.start.setOnClickListener(object :View.OnClickListener{
             override fun onClick(v: View?) {
-                DatePickerDialog(homeActivity, DatePickerDialog.OnDateSetListener {
+                var dialog=DatePickerDialog(homeActivity, DatePickerDialog.OnDateSetListener {
                     view, year, monthOfYear, dayOfMonth ->
                     homeActivity!!.stareDate.text= ((monthOfYear + 1).toString() +"-"+ dayOfMonth + "-" +year.toString() )
                     flag=true
+                    homeActivity!!.whereYouStart()
                     homeActivity!!.searchLocation.requestFocus()
-                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+
+                dialog.show()
             }
         })
-        homeActivity!!.endDate.setOnClickListener(object :View.OnClickListener{
+        homeActivity!!.end.setOnClickListener(object :View.OnClickListener{
             override fun onClick(v: View?) {
                 DatePickerDialog(homeActivity, DatePickerDialog.OnDateSetListener {
                     view, year, monthOfYear, dayOfMonth ->

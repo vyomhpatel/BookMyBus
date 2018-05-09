@@ -20,7 +20,6 @@ import org.opencv.core.Rect
 
 class FaceRecognition : AppCompatActivity(), OnFaceDetectorListener {
     private val TAG = "FaceRecognition";
-
     private val FACE1 = "face1"
     private val FACE2 = "face2"
     private var isGettingFace = false

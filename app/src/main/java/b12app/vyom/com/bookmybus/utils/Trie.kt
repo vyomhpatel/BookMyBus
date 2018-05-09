@@ -1,7 +1,4 @@
-package b12app.vyom.com.bookmybus.utils.dictionaryTree
-
-import b12app.vyom.com.bookmybus.model.City
-import b12app.vyom.com.bookmybus.utils.city
+package b12app.vyom.com.bookmybus.utils
 
 class Trie<T> {
     class Node<T>{
@@ -35,23 +32,23 @@ class Trie<T> {
         while (i < length) {
             ///用相对于a字母的值作为下标索引，也隐式地记录了该字母的值
             val index = chrs[i] - ' '
-            if (root.childs?.get(index) != null) {
+            if (root.childs.get(index) != null) {
                 ////已经存在了，该子节点prefix_num++
-                root.childs?.get(index)!!.prefix_num++
+                root.childs.get(index)!!.prefix_num++
             } else {
                 ///如果不存在
-                root.childs!![index] = Node()
-                root.childs!![index]!!.prefix_num++
+                root.childs[index] = Node()
+                root.childs[index]!!.prefix_num++
             }
 
             ///如果到了字串结尾，则做标记
             if (i == length - 1) {
-                root.childs!![index]!!.isWord = true
-                root.childs!![index]!!.bean=bean
+                root.childs[index]!!.isWord = true
+                root.childs[index]!!.bean=bean
 
             }
             ///root指向子节点，继续处理
-            root = root.childs!![index]!!
+            root = root.childs[index]!!
             i++
         }
     }
@@ -65,11 +62,11 @@ class Trie<T> {
             }
             var i = 0
             while (i < 256) {
-                if (root.childs?.get(i) != null) {
+                if (root.childs.get(i) != null) {
                     val ch = (i + ' '.toInt()).toChar()
                     ////递归调用前序遍历
                     val tempStr = prefix + ch
-                    result.addAll(preTraversal(root.childs!![i]!!, tempStr))
+                    result.addAll(preTraversal(root.childs[i]!!, tempStr))
                 }
                 i++
             }
@@ -84,11 +81,11 @@ class Trie<T> {
         val length = chs.size
         while (i < length) {
             val index = chs[i] - ' '
-            if (root.childs?.get(index) == null) {
+            if (root.childs.get(index) == null) {
                 ///如果不存在，则查找失败
                 return false
             }
-            root = root.childs!![index]!!
+            root = root.childs[index]!!
             i++
         }
 
@@ -102,10 +99,10 @@ class Trie<T> {
         val length = chrs.size
         while (i < length) {
             val index = chrs[i] - ' '
-            if (root.childs?.get(index) == null) {
+            if (root.childs.get(index) == null) {
                 return null
             }
-            root = root.childs!![index]!!
+            root = root.childs[index]!!
             i++
         }
         ///结果包括该前缀本身
