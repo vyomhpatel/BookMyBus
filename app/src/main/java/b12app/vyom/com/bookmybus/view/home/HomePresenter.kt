@@ -2,8 +2,6 @@ package b12app.vyom.com.bookmybus.view.home
 
 
 import android.app.DatePickerDialog
-import android.content.DialogInterface
-import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -18,17 +16,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.widget.Toast
 import android.widget.AdapterView
-import b12app.vyom.com.bookmybus.R
-import b12app.vyom.com.bookmybus.utils.ENDLatitude
-import b12app.vyom.com.bookmybus.utils.ENDLongitude
-import b12app.vyom.com.bookmybus.utils.STARTLatitude
-import b12app.vyom.com.bookmybus.utils.STARTLongitude
-import b12app.vyom.com.bookmybus.view.Routes.RoutesActivity
-import com.getkeepsafe.taptargetview.TapTarget
-import com.getkeepsafe.taptargetview.TapTargetView
 import java.util.*
-import android.graphics.drawable.Drawable
-import android.graphics.Typeface
 
 
 
@@ -54,7 +42,13 @@ class HomePresenter(homeActivity: HomeActivity) {
                 }else{
                     endLocation=autoComplete?.get(i)
                     homeActivity!!.end.text=endLocation?.cityname
-                    homeActivity!!.letsGO()
+                    homeActivity!!.submit.setVisibility(View.VISIBLE)
+
+                    homeActivity!!.letsGO(startLocation?.citylatitude,
+                            startLocation?.citylongtitude,
+                            endLocation?.citylatitude,
+                            endLocation?.citylongtitude
+                            )
                 }
                 homeActivity!!.searchLocation.clearFocus();
                 homeActivity!!.searchLocation.setQuery("",false);
@@ -122,19 +116,6 @@ class HomePresenter(homeActivity: HomeActivity) {
         requestCities()
         setSearchView()
         setDatePicker()
-
-    homeActivity.submit.setOnClickListener(object :View.OnClickListener{
-        override fun onClick(v: View?) {
-            if(startLocation!=null && endLocation!==null){
-                val intent=Intent(homeActivity,RoutesActivity::class.java)
-                intent.putExtra(STARTLatitude,startLocation!!.citylatitude!!)
-                intent.putExtra(STARTLongitude,startLocation!!.citylongtitude!!)
-                intent.putExtra(ENDLatitude,endLocation!!.citylatitude!!)
-                intent.putExtra(ENDLongitude,endLocation!!.citylongtitude!!)
-                homeActivity.startActivity(intent)
-            }
-        }
-    })
     }
 
     fun setDatePicker(){

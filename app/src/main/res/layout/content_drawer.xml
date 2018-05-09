@@ -42,8 +42,8 @@
                     android:layout_marginStart="20dp"
                     android:layout_gravity="start"
                     android:layout_marginEnd="20dp"
-                    android:text="start"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    android:text="@string/start"/>
 
                 <TextView
                     android:id="@+id/stareDate"
@@ -52,7 +52,7 @@
                     android:textSize="30sp"
                     android:layout_marginEnd="20dp"
                     android:layout_gravity="end"
-                    android:text="start date"/>
+                    />
 
             </android.support.design.widget.CoordinatorLayout>
 
@@ -68,7 +68,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_gravity="start"
                     android:layout_marginEnd="20dp"
-                    android:text="end"
+                    android:text="@string/destination"
                     android:textSize="30sp" />
                 <TextView
                     android:id="@+id/endDate"
@@ -77,15 +77,19 @@
                     android:textSize="30sp"
                     android:layout_gravity="end"
                     android:layout_marginEnd="20dp"
-                    android:text="back date"/>
+                    />
             </android.support.design.widget.CoordinatorLayout>
 
         </LinearLayout>
-    <Button
+    <TextView
         android:id="@+id/submit"
+        android:layout_gravity="center"
         android:layout_margin="20dp"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="submit"/>
+        android:textSize="30sp"
+        android:visibility="invisible"
+        android:text="@string/go"
+        />
 
 </LinearLayout>

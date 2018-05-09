@@ -24,13 +24,13 @@ public class RoutesPresenter implements RoutesContract.IPresenter,GetIDListener 
         this.context = routesActivity;
         this.iView = routesActivity;
         jApiService = JRetrofitInstance.getRetrofitInstance().create(JApiService.class);
-        new VolleyHelper(routesActivity).startRequest(1,1,1,1,this);
+//        new VolleyHelper(routesActivity).startRequest(1,1,1,1,this);
     }
 
     @Override
     public void getBusesForRoute(String id) {
 
-        jApiService.getUser(id).enqueue(new Callback<JBusByRoute>() {
+        jApiService.getUser("1").enqueue(new Callback<JBusByRoute>() {
             @Override
             public void onResponse(Call<JBusByRoute> call, Response<JBusByRoute> response) {
 
