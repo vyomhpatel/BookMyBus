@@ -7,6 +7,8 @@ const val STARTLatitude="startLatitude"
 const val STARTLongitude="startLongitude"
 const val ENDLatitude="endLatitude"
 const val ENDLongitude="endLongitude"
+const val STARTName="startName"
+const val ENDName="endName"
 
 const val isBooked=1
 const val isReserved=2

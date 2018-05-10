@@ -1,7 +1,9 @@
 package b12app.vyom.com.bookmybus.view.returnroute
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import b12app.vyom.com.bookmybus.R
 import b12app.vyom.com.bookmybus.adapters.RoutesAdapter
@@ -10,6 +12,7 @@ import b12app.vyom.com.bookmybus.utils.ENDLatitude
 import b12app.vyom.com.bookmybus.utils.ENDLongitude
 import b12app.vyom.com.bookmybus.utils.STARTLatitude
 import b12app.vyom.com.bookmybus.utils.STARTLongitude
+import b12app.vyom.com.bookmybus.view.TestActivity
 import kotlinx.android.synthetic.main.activity_journey_list.*
 import kotlinx.android.synthetic.main.activity_return_route.*
 
@@ -54,8 +57,9 @@ class ReturnRouteActivity : AppCompatActivity(), ReturnRoutesContract.IView {
 
        var routesAdapter = RoutesAdapter(this,businformationBeanList)
         returnRoutesRecyclerView.adapter = routesAdapter
+        returnRoutesRecyclerView!!.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         routesAdapter.setMItemClickListener { v, position ->
-
+            startActivity(Intent(this@ReturnRouteActivity,TestActivity::class.java))
         }
 
     }

@@ -1,6 +1,7 @@
 package b12app.vyom.com.bookmybus.view.home
 
 
+import android.app.Application
 import android.app.DatePickerDialog
 import android.util.Log
 import android.view.View
@@ -16,67 +17,72 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.widget.Toast
 import android.widget.AdapterView
+import b12app.vyom.com.bookmybus.utils.dagger2.DaggerMyComponent
+import b12app.vyom.com.bookmybus.utils.dagger2.MyComponent
 import java.util.*
-
-
-
+import javax.inject.Inject
 
 class HomePresenter(homeActivity: HomeActivity) {
-    var homeActivity: HomeActivity? = homeActivity
-    var city:List<City.CityBean>?=null
-    var adapter:ArrayAdapter<String>?=null
-    var autoComplete:ArrayList<City.CityBean>?=null
-    var trie: Trie<City.CityBean>
-    var startLocation:City.CityBean?=null
-    var endLocation:City.CityBean?=null
-    var flag=true
+    public var homeActivity: HomeActivity? = homeActivity
+    var city: List<City.CityBean>? = null
+    var adapter: ArrayAdapter<String>? = null
+    var autoComplete: ArrayList<City.CityBean>? = null
+    var startLocation: City.CityBean? = null
+    var endLocation: City.CityBean? = null
+    var flag = true
+
+    @Inject
+    lateinit var trie: Trie<City.CityBean>
+
 
     fun setSearchView() {
         homeActivity!!.searchLocation.clearFocus()
         homeActivity!!.list_view.setOnItemClickListener(object : AdapterView.OnItemClickListener {
             override fun onItemClick(adapterView: AdapterView<*>, view: View, i: Int, l: Long) {
-                if(flag){
-                    startLocation=autoComplete?.get(i)
-                    homeActivity!!.start.text=startLocation?.cityname
-                    homeActivity!!.chooseDestination()
-                }else{
-                    endLocation=autoComplete?.get(i)
-                    homeActivity!!.end.text=endLocation?.cityname
+                if (flag) {
+                    startLocation = autoComplete?.get(i)
+                    homeActivity!!.start.text = startLocation?.cityname
+                    // homeActivity!!.chooseDestination()
+                } else {
+                    endLocation = autoComplete?.get(i)
+                    homeActivity!!.end.text = endLocation?.cityname
                     homeActivity!!.submit.setVisibility(View.VISIBLE)
 
                     homeActivity!!.letsGO(startLocation?.citylatitude,
                             startLocation?.citylongtitude,
                             endLocation?.citylatitude,
-                            endLocation?.citylongtitude
-                            )
+                            endLocation?.citylongtitude,
+                            startLocation?.cityname,
+                            endLocation?.cityname
+                    )
                 }
                 homeActivity!!.searchLocation.clearFocus();
-                homeActivity!!.searchLocation.setQuery("",false);
+                homeActivity!!.searchLocation.setQuery("", false);
             }
         })
 //        homeActivity!!.list_view.setTextFilterEnabled(true);
         homeActivity!!.searchLocation.setIconifiedByDefault(true); //直接显示搜索框，不隐藏
         homeActivity!!.searchLocation.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                Toast.makeText(homeActivity,query,Toast.LENGTH_LONG).show()
+                Toast.makeText(homeActivity, query, Toast.LENGTH_LONG).show()
                 return false
             }
+
             override fun onQueryTextChange(newText: String): Boolean {
-                if(newText.length>0){
-                    autoComplete=trie.getWordsForPrefix(trie.root,newText)
-                    if(autoComplete==null){
+                if (newText.length > 0) {
+                    autoComplete = trie.getWordsForPrefix(trie.root, newText)
+                    if (autoComplete == null) {
                         adapter?.clear()
                         return false
                     }
-                    val autoStringList=ArrayList<String>()
-                    for(city:City.CityBean in autoComplete!!){
+                    val autoStringList = ArrayList<String>()
+                    for (city: City.CityBean in autoComplete!!) {
                         city.cityname?.let { autoStringList.add(it) }
                     }
-                    adapter=ArrayAdapter<String>(homeActivity,android.R.layout.simple_list_item_1,autoStringList)
+                    adapter = ArrayAdapter<String>(homeActivity, android.R.layout.simple_list_item_1, autoStringList)
                     homeActivity!!.list_view.setAdapter(adapter)
                     return true
-                }
-                else{
+                } else {
                     adapter?.clear()
                 }
                 return false
@@ -95,37 +101,40 @@ class HomePresenter(homeActivity: HomeActivity) {
 
     }
 
-    fun requestCities(){
-        val retrofit=RetrofitInstance.getRetrofitInstance()
-        val callback=retrofit!!.create(SearchBusAPI::class.java).getCity()
-        callback.enqueue(object :Callback<City> {
+    fun requestCities() {
+        val retrofit = RetrofitInstance.getRetrofitInstance()
+        val callback = retrofit!!.create(SearchBusAPI::class.java).getCity()
+        callback.enqueue(object : Callback<City> {
             override fun onFailure(call: Call<City>?, t: Throwable?) {
                 Log.i("Response", t?.message);
             }
-            override fun onResponse(call:Call<City>, response: Response<City>) {
-                city=response.body()!!.getCity()
-                for(cityBean : City.CityBean in city!!){
-                    trie.insert(cityBean,cityBean.cityname!!)
+
+            override fun onResponse(call: Call<City>, response: Response<City>) {
+                city = response.body()!!.getCity()
+                for (cityBean: City.CityBean in city!!) {
+                    trie.insert(cityBean, cityBean.cityname!!)
                 }
-           }
-       })
+            }
+        })
     }
 
     init {
+        var myComponent=DaggerMyComponent.builder().build()
+        myComponent.inject(homeActivity)
         trie = Trie()
         requestCities()
         setSearchView()
         setDatePicker()
     }
 
-    fun setDatePicker(){
-        var calendar= Calendar.getInstance()
-        homeActivity!!.start.setOnClickListener(object :View.OnClickListener{
+
+    fun setDatePicker() {
+        var calendar = Calendar.getInstance()
+        homeActivity!!.start.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
-                var dialog=DatePickerDialog(homeActivity, DatePickerDialog.OnDateSetListener {
-                    view, year, monthOfYear, dayOfMonth ->
-                    homeActivity!!.stareDate.text= ((monthOfYear + 1).toString() +"-"+ dayOfMonth + "-" +year.toString() )
-                    flag=true
+                var dialog = DatePickerDialog(homeActivity, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                    homeActivity!!.stareDate.text = ((monthOfYear + 1).toString() + "-" + dayOfMonth + "-" + year.toString())
+                    flag = true
                     homeActivity!!.whereYouStart()
                     homeActivity!!.searchLocation.requestFocus()
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
@@ -133,14 +142,13 @@ class HomePresenter(homeActivity: HomeActivity) {
                 dialog.show()
             }
         })
-        homeActivity!!.end.setOnClickListener(object :View.OnClickListener{
+        homeActivity!!.end.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
-                DatePickerDialog(homeActivity, DatePickerDialog.OnDateSetListener {
-                    view, year, monthOfYear, dayOfMonth ->
-                    homeActivity!!.endDate.text=((monthOfYear + 1).toString() + "-" + dayOfMonth+'-'+year.toString())
-                    flag=false
+                DatePickerDialog(homeActivity, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                    homeActivity!!.endDate.text = ((monthOfYear + 1).toString() + "-" + dayOfMonth + '-' + year.toString())
+                    flag = false
                     homeActivity!!.searchLocation.requestFocus()
-                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH+1), calendar.get(Calendar.DAY_OF_MONTH)).show()
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH + 1), calendar.get(Calendar.DAY_OF_MONTH)).show()
             }
         })
     }

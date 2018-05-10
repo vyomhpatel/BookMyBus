@@ -1,6 +1,7 @@
 package b12app.vyom.com.bookmybus.utils
 
-class Trie<T> {
+
+open class Trie<T> {
     class Node<T>{
         var childs:Array<Node<T>?>
         var isWord: Boolean

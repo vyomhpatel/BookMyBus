@@ -26,12 +26,13 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
     private var unbinder: Unbinder? = null
     private val busByRoute: JBusByRoute? = null
     private var iPresenter: RoutesContract.IPresenter? = null
-    private var businformationBeanList: List<JBusByRoute.BusinformationBean>? = null
+    private var businformationBeanList: List<JBusByRoute.BusinformationBean> ? = null
     private var startLat = ""
     private var startLong = ""
     private var endLat = ""
     private var endLong = ""
-
+    private var startName = ""
+    private var endName = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +46,8 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
          startLong = intent.getStringExtra(STARTLongitude)
          endLat = intent.getStringExtra(ENDLatitude)
          endLong = intent.getStringExtra(ENDLongitude)
-
+        startName=intent.getStringExtra(STARTName)
+        endName=intent.getStringExtra(ENDName)
         iPresenter!!.getRouteId(startLat, startLong, endLat, endLong)
         initToolbar()
     }
@@ -56,7 +58,7 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setHomeButtonEnabled(true);
-        supportActionBar!!.title = "Vadodara - Bombay"
+        supportActionBar!!.title = startName+" - "+endName
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -67,8 +69,8 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
     }
 
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onStop() {
+        super.onStop()
         unbinder!!.unbind()
     }
 
@@ -90,17 +92,11 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
         routesRecyclerView!!.adapter = routesAdapter
 
         routesAdapter.setMItemClickListener { v, position ->
-            var startTempLat = startLat
-            var startTempLng = startLong
-            startLat = endLat
-            startLong = endLong
-            endLat = startTempLat
-            endLong = startTempLng
             intent = Intent(this,ReturnRouteActivity::class.java)
-            intent.putExtra(STARTLatitude,startLat)
-            intent.putExtra(STARTLongitude,startLong)
-            intent.putExtra(ENDLatitude,endLat)
-            intent.putExtra(ENDLongitude,endLong)
+            intent.putExtra(STARTLatitude,endLat)
+            intent.putExtra(STARTLongitude,endLong)
+            intent.putExtra(ENDLatitude,startLat)
+            intent.putExtra(ENDLongitude,startLong)
             startActivity(intent)
         }
 

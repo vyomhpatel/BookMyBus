@@ -21,10 +21,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import b12app.vyom.com.bookmybus.utils.ENDLatitude
-import b12app.vyom.com.bookmybus.utils.ENDLongitude
-import b12app.vyom.com.bookmybus.utils.STARTLatitude
-import b12app.vyom.com.bookmybus.utils.STARTLongitude
+import b12app.vyom.com.bookmybus.utils.*
 import b12app.vyom.com.bookmybus.view.routes.RoutesActivity
 
 
@@ -100,69 +97,45 @@ class HomeActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
         TapTargetView.showFor(this, // `this` is an Activity
                 TapTarget.forView(findViewById(R.id.leftTop), "input some place", "")
                         // All options below are optional
-                        .outerCircleColor(R.color.blue)      // Specify a color for the outer circle
-                        .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
-                        .targetCircleColor(R.color.white)   // Specify a color for the target circle
-                        .titleTextSize(20)                  // Specify the size (in sp) of the title text
-                        .titleTextColor(R.color.white)      // Specify the color of the title text
-                        .descriptionTextSize(18)            // Specify the size (in sp) of the description text
-                        .descriptionTextColor(R.color.red)  // Specify the color of the description text
-                        .textColor(R.color.red)            // Specify a color for both the title and description text
-                        .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
-                        .dimColor(R.color.txtBlack)            // If set, will dim behind the view with 30% opacity of the given color
-                        .drawShadow(true)                   // Whether to draw a drop shadow or not
-                        .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
-                        .tintTarget(true)                   // Whether to tint the target view's color
-                        .transparentTarget(false)           // Specify whether the target is transparent (displays the content underneath)
-                        .targetRadius(40), // Specify the target radius (in dp)
-                object : TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
-                    override fun onTargetClick(view: TapTargetView) {
-                        super.onTargetClick(view)      // This call is optional
-                        //doSomething()
-                    }
-                })
-    }
-    fun chooseDestination(){
-        TapTargetView.showFor(this, // `this` is an Activity
-                TapTarget.forView(findViewById(R.id.end), "let's choose your destination", "")
-                        // All options below are optional
-                        .outerCircleColor(R.color.blue)      // Specify a color for the outer circle
-                        .outerCircleAlpha(0.96f)            // Specify the alpha amount for the outer circle
-                        .targetCircleColor(R.color.white)   // Specify a color for the target circle
-                        .titleTextSize(20)                  // Specify the size (in sp) of the title text
-                        .titleTextColor(R.color.white)      // Specify the color of the title text
-                        .descriptionTextSize(18)            // Specify the size (in sp) of the description text
-                        .descriptionTextColor(R.color.red)  // Specify the color of the description text
-                        .textColor(R.color.red)            // Specify a color for both the title and description text
-                        .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
-                        .dimColor(R.color.txtBlack)            // If set, will dim behind the view with 30% opacity of the given color
-                        .drawShadow(true)                   // Whether to draw a drop shadow or not
-                        .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
-                        .tintTarget(true)                   // Whether to tint the target view's color
-                        .transparentTarget(false)           // Specify whether the target is transparent (displays the content underneath)
-                        .targetRadius(40), // Specify the target radius (in dp)
-                object : TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
-                    override fun onTargetClick(view: TapTargetView) {
-                        super.onTargetClick(view)      // This call is optional
-                        //doSomething()
-                    }
-                })
-    }
-    fun letsGO(sla:String?,slong:String?,ela:String?,elong:String?){
-        TapTargetView.showFor(this, // `this` is an Activity
-                TapTarget.forView(findViewById(R.id.submit), "", "")
-                        // All options below are optional
+                        .outerCircleColor(R.color.red)      // Specify a color for the outer circle
                         .outerCircleAlpha(0.00f)            // Specify the alpha amount for the outer circle
                         .targetCircleColor(R.color.white)   // Specify a color for the target circle
                         .titleTextSize(20)                  // Specify the size (in sp) of the title text
                         .titleTextColor(R.color.white)      // Specify the color of the title text
                         .descriptionTextSize(18)            // Specify the size (in sp) of the description text
                         .descriptionTextColor(R.color.red)  // Specify the color of the description text
-                        .textColor(R.color.text_black)            // Specify a color for both the title and description text
+                        .textColor(R.color.blue)            // Specify a color for both the title and description text
                         .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
                         .dimColor(R.color.txtBlack)            // If set, will dim behind the view with 30% opacity of the given color
                         .drawShadow(true)                   // Whether to draw a drop shadow or not
-                        .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+                        .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                        .tintTarget(true)                   // Whether to tint the target view's color
+                        .transparentTarget(false)           // Specify whether the target is transparent (displays the content underneath)
+                        .targetRadius(40), // Specify the target radius (in dp)
+                object : TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+                    override fun onTargetClick(view: TapTargetView) {
+                        super.onTargetClick(view)      // This call is optional
+                        //doSomething()
+                    }
+                })
+    }
+
+    fun letsGO(sla:String?,slong:String?,ela:String?,elong:String?,sname:String?,ename:String?){
+        TapTargetView.showFor(this, // `this` is an Activity
+                TapTarget.forView(findViewById(R.id.submit), "", "")
+                        // All options below are optional
+                        .outerCircleColor(R.color.red)      // Specify a color for the outer circle
+                        .outerCircleAlpha(0.00f)            // Specify the alpha amount for the outer circle
+                        .targetCircleColor(R.color.white)   // Specify a color for the target circle
+                        .titleTextSize(20)                  // Specify the size (in sp) of the title text
+                        .titleTextColor(R.color.white)      // Specify the color of the title text
+                        .descriptionTextSize(18)            // Specify the size (in sp) of the description text
+                        .descriptionTextColor(R.color.red)  // Specify the color of the description text
+                        .textColor(R.color.blue)            // Specify a color for both the title and description text
+                        .textTypeface(Typeface.SANS_SERIF)  // Specify a typeface for the text
+                        .dimColor(R.color.txtBlack)            // If set, will dim behind the view with 30% opacity of the given color
+                        .drawShadow(true)                   // Whether to draw a drop shadow or not
+                        .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
                         .tintTarget(true)                   // Whether to tint the target view's color
                         .transparentTarget(false)           // Specify whether the target is transparent (displays the content underneath)
                         .targetRadius(40), // Specify the target radius (in dp)
@@ -176,6 +149,8 @@ class HomeActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                             intent.putExtra(STARTLongitude,slong)
                             intent.putExtra(ENDLatitude,ela)
                             intent.putExtra(ENDLongitude,elong)
+                            intent.putExtra(STARTName,sname)
+                            intent.putExtra(ENDName,ename)
                             startActivity(intent)
                         }
                     }
