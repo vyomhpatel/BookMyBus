@@ -11,14 +11,13 @@ import b12app.vyom.com.bookmybus.data.remote.RetrofitInstance
 import b12app.vyom.com.bookmybus.data.remote.SearchBusAPI
 import b12app.vyom.com.bookmybus.model.City
 import b12app.vyom.com.bookmybus.utils.Trie
-import kotlinx.android.synthetic.main.content_drawer.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import android.widget.Toast
 import android.widget.AdapterView
 import b12app.vyom.com.bookmybus.utils.dagger2.DaggerMyComponent
-import b12app.vyom.com.bookmybus.utils.dagger2.MyComponent
+import kotlinx.android.synthetic.main.activity_home2.*
 import java.util.*
 import javax.inject.Inject
 
@@ -42,7 +41,6 @@ class HomePresenter(homeActivity: HomeActivity) {
                 if (flag) {
                     startLocation = autoComplete?.get(i)
                     homeActivity!!.start.text = startLocation?.cityname
-                    // homeActivity!!.chooseDestination()
                 } else {
                     endLocation = autoComplete?.get(i)
                     homeActivity!!.end.text = endLocation?.cityname
@@ -61,7 +59,6 @@ class HomePresenter(homeActivity: HomeActivity) {
             }
         })
 //        homeActivity!!.list_view.setTextFilterEnabled(true);
-        homeActivity!!.searchLocation.setIconifiedByDefault(true); //直接显示搜索框，不隐藏
         homeActivity!!.searchLocation.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 Toast.makeText(homeActivity, query, Toast.LENGTH_LONG).show()
@@ -88,17 +85,6 @@ class HomePresenter(homeActivity: HomeActivity) {
                 return false
             }
         })
-//        homeActivity!!.swithLocation.setOnClickListener(object :View.OnClickListener{
-//            override fun onClick(v: View?) {
-//                //swap location
-//                val tempCity=startLocation
-//                startLocation=endLocation
-//                endLocation=tempCity
-//                homeActivity!!.start.text=startLocation?.cityname
-//                homeActivity!!.end.text=endLocation?.cityname
-//            }
-//        })
-
     }
 
     fun requestCities() {
@@ -135,11 +121,8 @@ class HomePresenter(homeActivity: HomeActivity) {
                 var dialog = DatePickerDialog(homeActivity, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                     homeActivity!!.stareDate.text = ((monthOfYear + 1).toString() + "-" + dayOfMonth + "-" + year.toString())
                     flag = true
-                    homeActivity!!.whereYouStart()
                     homeActivity!!.searchLocation.requestFocus()
-                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-
-                dialog.show()
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
             }
         })
         homeActivity!!.end.setOnClickListener(object : View.OnClickListener {

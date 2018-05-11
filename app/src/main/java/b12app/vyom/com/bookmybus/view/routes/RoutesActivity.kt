@@ -19,7 +19,6 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import kotlinx.android.synthetic.main.activity_journey_list.*
-import kotlinx.android.synthetic.main.content_drawer.*
 
 class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
 

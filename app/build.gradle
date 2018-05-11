@@ -65,9 +65,8 @@ dependencies {
     compile 'com.google.api-client:google-api-client:1.23.0'
     compile 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
     compile 'com.google.apis:google-api-services-calendar:v3-rev305-1.23.0'
-    compile 'com.karumi:dexter:4.1.0'
-    compile 'com.android.volley:volley:1.0.0'
     compile 'com.specyci:residemenu:1.6+'
+    compile 'com.github.amlcurran.showcaseview:library:5.4.3'
 
     implementation 'com.google.dagger:dagger-android-support:2.13' // Dagger 2 Android 支持包
     kapt 'com.google.dagger:dagger-compiler:2.13' // Dagger 2 注解处理
