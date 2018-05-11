@@ -31,7 +31,7 @@ class HomePresenter(homeActivity: HomeActivity) {
     var flag = true
 
     @Inject
-    lateinit var trie: Trie<City.CityBean>
+    var trie: Trie<City.CityBean>
 
 
     fun setSearchView() {
