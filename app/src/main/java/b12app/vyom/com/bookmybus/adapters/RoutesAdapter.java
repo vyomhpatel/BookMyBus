@@ -69,10 +69,21 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.RouteViewH
         }
     }
 
+    @Override
+    public int getItemViewType(int position) {
+
+        if (busByRoutes.size() <= 0) {
+
+            return -1;
+        }
+        return super.getItemViewType(position);
+    }
+
 
 
     @Override
     public int getItemCount() {
+
         return busByRoutes.size();
     }
 
@@ -113,15 +124,6 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.RouteViewH
          }
      }
 
-    @Override
-    public int getItemViewType(int position) {
-
-        if (busByRoutes.size() <= 0) {
-
-            return -1;
-        }
-        return super.getItemViewType(position);
-    }
 
     public void setMItemClickListener(RoutesAdapter.OnItemClickListener onItemClickListener) {
         this.mItemClickListener = onItemClickListener;
