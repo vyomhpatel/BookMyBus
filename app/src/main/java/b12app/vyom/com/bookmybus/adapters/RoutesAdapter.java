@@ -54,15 +54,15 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.RouteViewH
     @Override
     public void onBindViewHolder(@NonNull RoutesAdapter.RouteViewHolder holder, int position) {
 
-        if(busByRoutes.size()>0) {
+        if (busByRoutes.size() > 0) {
 
             holder.tvDeparture.setText(busByRoutes.get(position).getBusdeparturetime());
             holder.tvArrival.setText(busByRoutes.get(position).getDropingtime());
             holder.tvAvailableSeats.setText("47");
             holder.tvBusDesc.setText(busByRoutes.get(position).getBustype());
             duration = busByRoutes.get(position).getJournyduration();
-            holder.tvJourneyHs.setText(duration.substring(1,5)+" HR");
-            holder.tvTicketPrice.setText("₹ "+busByRoutes.get(position).getFare());
+            holder.tvJourneyHs.setText(duration.substring(1, 5) + " HR");
+            holder.tvTicketPrice.setText("₹ " + busByRoutes.get(position).getFare());
             holder.busId.setText(busByRoutes.get(position).getBusid());
 
             holder.itemView.setTag(position);
@@ -80,49 +80,41 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.RouteViewH
     }
 
 
-
     @Override
     public int getItemCount() {
 
         return busByRoutes.size();
     }
 
-     class RouteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-
-        @BindView(R.id.busId)
+    class RouteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView busId;
+        TextView tvDeparture;
+        TextView tvArrival;
+        TextView tvJourneyHs;
+        TextView tvBusDesc;
+        TextView tvTicketPrice;
+        TextView tvAvailableSeats;
 
-       @BindView(R.id.tvDeparture)
-       TextView tvDeparture;
+        public RouteViewHolder(View itemView) {
+            super(itemView);
+            busId = itemView.findViewById(R.id.busId);
+            tvDeparture = itemView.findViewById(R.id.tvDeparture);
+            tvArrival = itemView.findViewById(R.id.tvArrival);
+            tvJourneyHs = itemView.findViewById(R.id.tvJourneyHs);
+            tvBusDesc = itemView.findViewById(R.id.tvBusDesc);
+            tvTicketPrice = itemView.findViewById(R.id.tvTicketPrice);
+            tvAvailableSeats = itemView.findViewById(R.id.tvAvailableSeats);
 
-       @BindView(R.id.tvArrival)
-       TextView tvArrival;
+            itemView.setOnClickListener(this);
+        }
 
-       @BindView(R.id.tvJourneyHs)
-       TextView tvJourneyHs;
-
-       @BindView(R.id.tvBusDesc)
-       TextView tvBusDesc;
-
-       @BindView(R.id.tvTicketPrice)
-       TextView tvTicketPrice;
-
-       @BindView(R.id.tvAvailableSeats)
-       TextView tvAvailableSeats;
-
-         public RouteViewHolder(View itemView) {
-             super(itemView);
-             ButterKnife.bind(this,itemView);
-             itemView.setOnClickListener(this);
-         }
-
-         @Override
-         public void onClick(View v) {
-             if (mItemClickListener != null) {
-                 mItemClickListener.onItemClick(v, (Integer) v.getTag());
-             }
-         }
-     }
+        @Override
+        public void onClick(View v) {
+            if (mItemClickListener != null) {
+                mItemClickListener.onItemClick(v, (Integer) v.getTag());
+            }
+        }
+    }
 
 
     public void setMItemClickListener(RoutesAdapter.OnItemClickListener onItemClickListener) {

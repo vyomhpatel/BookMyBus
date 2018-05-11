@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.view.MenuItem
 
 import java.util.ArrayList
 
@@ -17,26 +18,20 @@ import b12app.vyom.com.bookmybus.view.returnroute.ReturnRouteActivity
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
-import kotlinx.android.synthetic.main.content_drawer.*
+import kotlinx.android.synthetic.main.activity_journey_list.*
 
 class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
-
-    @BindView(R.id.routesRecyclerView)
-    internal var routesRecyclerView: RecyclerView? = null
-
-    @BindView(R.id.tbRoutes)
-    internal var tbRoutes: Toolbar? = null
-
 
     private var unbinder: Unbinder? = null
     private val busByRoute: JBusByRoute? = null
     private var iPresenter: RoutesContract.IPresenter? = null
-    private var businformationBeanList: List<JBusByRoute.BusinformationBean>? = null
+    private var businformationBeanList: List<JBusByRoute.BusinformationBean> ? = null
     private var startLat = ""
     private var startLong = ""
     private var endLat = ""
     private var endLong = ""
-
+    private var startName = ""
+    private var endName = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,24 +45,31 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
          startLong = intent.getStringExtra(STARTLongitude)
          endLat = intent.getStringExtra(ENDLatitude)
          endLong = intent.getStringExtra(ENDLongitude)
-
+        startName=intent.getStringExtra(STARTName)
+        endName=intent.getStringExtra(ENDName)
         iPresenter!!.getRouteId(startLat, startLong, endLat, endLong)
         initToolbar()
-
-
     }
 
     private fun initToolbar() {
         tbRoutes!!.setNavigationIcon(R.drawable.back_ic)
         setSupportActionBar(tbRoutes)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.title = "Vadodara - Bombay"
 
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setHomeButtonEnabled(true);
+        supportActionBar!!.title = startName+" - "+endName
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if(item!!.itemId==android.R.id.home){
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onStop() {
+        super.onStop()
         unbinder!!.unbind()
     }
 
@@ -89,17 +91,11 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
         routesRecyclerView!!.adapter = routesAdapter
 
         routesAdapter.setMItemClickListener { v, position ->
-            var startTempLat = startLat
-            var startTempLng = startLong
-            startLat = endLat
-            startLong = endLong
-            endLat = startTempLat
-            endLong = startTempLng
             intent = Intent(this,ReturnRouteActivity::class.java)
-            intent.putExtra(STARTLatitude,startLat)
-            intent.putExtra(STARTLongitude,startLong)
-            intent.putExtra(ENDLatitude,endLat)
-            intent.putExtra(ENDLongitude,endLong)
+            intent.putExtra(STARTLatitude,endLat)
+            intent.putExtra(STARTLongitude,endLong)
+            intent.putExtra(ENDLatitude,startLat)
+            intent.putExtra(ENDLongitude,startLong)
             startActivity(intent)
         }
 

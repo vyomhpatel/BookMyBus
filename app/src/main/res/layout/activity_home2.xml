@@ -1,46 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.home.HomeActivity">
+    tools:context=".view.home.HomeActivity"
+    android:orientation="vertical"
+    android:background="@drawable/foreground"
+    android:layout_margin="10dp"
+    android:weightSum="1"
+    >
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <SearchView
+        android:id="@+id/searchLocation"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/colorPrimaryDark"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:iconifiedByDefault="true"
+        android:imeOptions="actionSearch"
+        android:inputType="textCapWords"
         />
 
-    <android.support.v4.widget.DrawerLayout
-        android:layout_marginTop="60dp"
-        android:id="@+id/drawerLayout"
+    <ListView
+        android:id="@+id/list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:openDrawer="start">
+        android:layout_height="0dp"
+        android:layout_weight="0.5" />
 
-        <include layout="@layout/content_drawer"/>
 
-        <android.support.design.widget.NavigationView
-            android:id="@+id/navigation_view"
-            android:layout_width="250dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:fitsSystemWindows="true"
-            app:headerLayout="@layout/navigation_view"
-            app:menu="@menu/navigation_menu"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="0.3"
+        android:weightSum="1">
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_gravity="start"
+                android:layout_marginEnd="20dp"
+                android:textSize="30sp"
+                android:textColor="@color/text_black"
+                android:text="Leave"/>
+
+            <TextView
+                android:id="@+id/stareDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:textColor="@color/text_black"
+                android:layout_marginEnd="20dp"
+                android:layout_gravity="end"
+                />
+
+        </android.support.design.widget.CoordinatorLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/txtBlack"
             />
 
-    </android.support.v4.widget.DrawerLayout>
+        <android.support.design.widget.CoordinatorLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_margin="5dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_gravity="start"
+                android:layout_marginEnd="20dp"
+                android:textColor="@color/text_black"
+                android:text="Arrive"
+                android:textSize="30sp" />
+            <TextView
+                android:id="@+id/endDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:textColor="@color/text_black"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
+                />
+        </android.support.design.widget.CoordinatorLayout>
 
+    </LinearLayout>
+    <Button
+        android:id="@+id/submit"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="@string/go"
+        android:textSize="30sp"
+        />
 
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/fab"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom|end"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--app:srcCompat="@android:drawable/ic_dialog_email" />-->
-
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

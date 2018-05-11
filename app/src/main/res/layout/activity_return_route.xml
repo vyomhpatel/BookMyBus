@@ -8,7 +8,7 @@
     tools:context=".view.routes.RoutesActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/tbRoutes"
+        android:id="@+id/tbreturnRoutes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorRouteBg"

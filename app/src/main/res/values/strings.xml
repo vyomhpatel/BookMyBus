@@ -34,4 +34,7 @@
     <string name="confirm">Confirm</string>
     <string name="copyright">All rights reserved by © BookMyBus</string>
     <string name="seats">Seats</string>
+    <string name="go">GO!</string>
+    <string name="destination">destination</string>
+    <string name="start">start</string>
 </resources>

@@ -2,12 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="b12app.vyom.com.bookmybus">
 
+
     <uses-feature android:name="android.hardware.camera" />
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
@@ -26,17 +27,21 @@
         <activity
             android:name=".view.home.HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".view.facerecognition.FaceRecognition">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".view.facerecognition.FaceRecognition">
+
         </activity>
         <activity android:name=".view.routes.RoutesActivity"></activity>
         <activity android:name=".view.TestActivity"></activity>
         <activity android:name=".view.returnroute.ReturnRouteActivity"></activity>
+        <activity android:name=".view.seatpick.SeatPick">
+
+        </activity>
     </application>
 
 </manifest>

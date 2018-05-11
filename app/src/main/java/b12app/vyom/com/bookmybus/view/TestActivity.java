@@ -16,21 +16,18 @@ public class TestActivity extends AppCompatActivity {
 
     @BindView(R.id.testFrame)
     FrameLayout testFrame;
-
-    @BindView(R.id.tbTest)
     Toolbar tbTest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        ButterKnife.bind(this);
+        tbTest=findViewById(R.id.tbTest);
         initToolbar();
         ConfirmedTicketFragment confirmedTicketFragment = new ConfirmedTicketFragment();
 //        SendMail sendMail = new SendMail();
-//        BookTicketFragment bookTicketFragment = new BookTicketFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.testFrame,confirmedTicketFragment,"test").commit();
-
+        BookTicketFragment bookTicketFragment = new BookTicketFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.testFrame,bookTicketFragment,"test").commit();
     }
 
     private void initToolbar() {
@@ -38,6 +35,5 @@ public class TestActivity extends AppCompatActivity {
         setSupportActionBar(tbTest);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Ahmedabad - Bombay");
-
     }
 }
