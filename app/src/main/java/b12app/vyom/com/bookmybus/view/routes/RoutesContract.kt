@@ -5,7 +5,7 @@ import b12app.vyom.com.bookmybus.model.JBusByRoute
 interface RoutesContract {
 
     interface IView {
-        fun initRecyclerView(businformationBeanList: List<JBusByRoute.BusinformationBean>)
+        fun initRecyclerView(incomeList: List<JBusByRoute.BusinformationBean>)
 
     }
 

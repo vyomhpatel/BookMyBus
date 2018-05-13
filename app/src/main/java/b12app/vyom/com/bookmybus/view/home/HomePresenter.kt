@@ -30,7 +30,6 @@ class HomePresenter(homeActivity: HomeActivity) {
     var endLocation: City.CityBean? = null
     var flag = true
 
-    @Inject
     var trie: Trie<City.CityBean>
 
 
@@ -105,8 +104,8 @@ class HomePresenter(homeActivity: HomeActivity) {
     }
 
     init {
-        var myComponent=DaggerMyComponent.builder().build()
-        myComponent.inject(homeActivity)
+//        var myComponent=DaggerMyComponent.builder().build()
+//        myComponent.inject(homeActivity)
         trie = Trie()
         requestCities()
         setSearchView()
@@ -118,7 +117,7 @@ class HomePresenter(homeActivity: HomeActivity) {
         var calendar = Calendar.getInstance()
         homeActivity!!.start.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
-                var dialog = DatePickerDialog(homeActivity, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                DatePickerDialog(homeActivity, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                     homeActivity!!.stareDate.text = ((monthOfYear + 1).toString() + "-" + dayOfMonth + "-" + year.toString())
                     flag = true
                     homeActivity!!.searchLocation.requestFocus()
