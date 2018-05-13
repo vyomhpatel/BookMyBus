@@ -15,6 +15,7 @@ import b12app.vyom.com.bookmybus.adapters.RoutesAdapter
 import b12app.vyom.com.bookmybus.model.JBusByRoute
 import b12app.vyom.com.bookmybus.utils.*
 import b12app.vyom.com.bookmybus.view.returnroute.ReturnRouteActivity
+import com.google.android.gms.common.util.CollectionUtils.mutableListOf
 import kotlinx.android.synthetic.main.activity_journey_list.*
 
 class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
@@ -61,26 +62,45 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
         for(item in incomeList){
             businformationBeanList.add(item)
         }
-        for( i in 0..5){
-            businformationBeanList.addAll(MockData.Mock())
-        }
+        businformationBeanList.addAll(MockData.Mock())
+        businformationBeanList.addAll(MockData.Mock())
+        businformationBeanList.addAll(MockData.Mock())
         routesRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         val routesAdapter = RoutesAdapter(this, businformationBeanList)
         routesRecyclerView.adapter = routesAdapter
+//        val animator=DefaultItemAnimator()
+//        animator.addDuration=500
+//        routesRecyclerView.itemAnimator=animator
+        var isSlidingToLast=false
         routesRecyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                     if(dy>0){
-                        Log.i("ScrollListener ", "down")
-                        val previousSize=businformationBeanList.size
-                        businformationBeanList.addAll(MockData.Mock())
-                        val newSize =businformationBeanList.size
-                        for(i in previousSize..newSize) {
-                            routesAdapter.notifyItemInserted(i)
-                        }
+                        isSlidingToLast=true
+                    }else{
+                        isSlidingToLast=false
                     }
+            }
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+                if(isSlidingToLast&&newState == RecyclerView.SCROLL_STATE_IDLE){
+                        val manager = recyclerView!!.getLayoutManager() as LinearLayoutManager
+                        val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()
+                        val totalItemCount = manager.itemCount
+
+                        // 判断是否滚动到底部，并且是向下滚动
+                        if(lastVisibleItem == (totalItemCount - 1)){
+                            Log.i("ScrollListener ", "down")
+                            val previousSize=businformationBeanList.size
+                            businformationBeanList.addAll(MockData.Mock())
+                            val newSize =businformationBeanList.size
+                            for(i in previousSize..newSize)
+                                routesAdapter.notifyItemInserted(i)
+                        }
                 }
-            })
+            }
+        })
         routesAdapter.setMItemClickListener { v, position ->
             intent = Intent(this,ReturnRouteActivity::class.java)
             intent.putExtra(STARTLatitude,endLat)
