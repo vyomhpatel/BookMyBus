@@ -34,28 +34,13 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.RouteViewH
     @Override
     public RoutesAdapter.RouteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         RouteViewHolder routeViewHolder;
-
-        if (viewType == -1) {//if empty
-
-            View v = LayoutInflater.from(context).inflate(R.layout.item_empty, parent, false);
-
-            routeViewHolder = new RouteViewHolder(v);
-
-        } else {
-
-            View v = LayoutInflater.from(context).inflate(R.layout.route_item_format, parent, false);
-
-            routeViewHolder = new RouteViewHolder(v);
-        }
-
+        View v = LayoutInflater.from(context).inflate(R.layout.route_item_format, parent, false);
+        routeViewHolder = new RouteViewHolder(v);
         return routeViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RoutesAdapter.RouteViewHolder holder, int position) {
-
-        if (busByRoutes.size() > 0) {
-
             holder.tvDeparture.setText(busByRoutes.get(position).getBusdeparturetime());
             holder.tvArrival.setText(busByRoutes.get(position).getDropingtime());
             holder.tvAvailableSeats.setText("47");
@@ -64,9 +49,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.RouteViewH
             holder.tvJourneyHs.setText(duration.substring(1, 5) + " HR");
             holder.tvTicketPrice.setText("₹ " + busByRoutes.get(position).getFare());
             holder.busId.setText(busByRoutes.get(position).getBusid());
-
             holder.itemView.setTag(position);
-        }
     }
 
     @Override
