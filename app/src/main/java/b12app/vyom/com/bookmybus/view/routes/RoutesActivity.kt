@@ -23,19 +23,16 @@ import android.content.Context
 import android.content.SharedPreferences
 
 
-
-
-
 class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
     private var iPresenter: RoutesContract.IPresenter? = null
-    private var businformationBeanList= mutableListOf<JBusByRoute.BusinformationBean>()
+    private var businformationBeanList = mutableListOf<JBusByRoute.BusinformationBean>()
     private var startLat = ""
     private var startLong = ""
     private var endLat = ""
     private var endLong = ""
     private var startName = ""
     private var endName = ""
-    private var mPrefs:SharedPreferences?=null
+    private var mPrefs: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,14 +41,14 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
         iPresenter = RoutesPresenter(this)
         businformationBeanList = ArrayList<JBusByRoute.BusinformationBean>()
 
-        mPrefs = this.getSharedPreferences(getString(b12app.vyom.com.bookmybus.R.string.shared_pref_title),android.content.Context.MODE_PRIVATE)
+        mPrefs = this.getSharedPreferences(getString(b12app.vyom.com.bookmybus.R.string.shared_pref_title), android.content.Context.MODE_PRIVATE)
 
-         startLat= intent.getStringExtra(STARTLatitude)
-         startLong = intent.getStringExtra(STARTLongitude)
-         endLat = intent.getStringExtra(ENDLatitude)
-         endLong = intent.getStringExtra(ENDLongitude)
-        startName=intent.getStringExtra(STARTName)
-        endName=intent.getStringExtra(ENDName)
+        startLat = intent.getStringExtra(STARTLatitude)
+        startLong = intent.getStringExtra(STARTLongitude)
+        endLat = intent.getStringExtra(ENDLatitude)
+        endLong = intent.getStringExtra(ENDLongitude)
+        startName = intent.getStringExtra(STARTName)
+        endName = intent.getStringExtra(ENDName)
         iPresenter!!.getRouteId(startLat, startLong, endLat, endLong)
         initToolbar()
     }
@@ -62,11 +59,11 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setHomeButtonEnabled(true);
-        supportActionBar!!.title = startName+" - "+endName
+        supportActionBar!!.title = startName + " - " + endName
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item!!.itemId==android.R.id.home){
+        if (item!!.itemId == android.R.id.home) {
             finish()
         }
         return super.onOptionsItemSelected(item)
@@ -77,11 +74,11 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
         super.onStop()
     }
 
-    override fun initRecyclerView(businformationBeanList: List<JBusByRoute.BusinformationBean>,startCity:String,endCity:String) {
+    override fun initRecyclerView(incomeList: List<JBusByRoute.BusinformationBean>, startCity: String, endCity: String) {
 
         routesRecyclerView!!.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-    override fun initRecyclerView(incomeList: List<JBusByRoute.BusinformationBean>) {
-        for(item in incomeList){
+
+        for (item in incomeList) {
             businformationBeanList.add(item)
         }
         businformationBeanList.addAll(MockData.Mock())
@@ -93,44 +90,45 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
 //        val animator=DefaultItemAnimator()
 //        animator.addDuration=500
 //        routesRecyclerView.itemAnimator=animator
-        var isSlidingToLast=false
-        routesRecyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+        var isSlidingToLast = false
+        routesRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                    if(dy>0){
-                        isSlidingToLast=true
-                    }else{
-                        isSlidingToLast=false
-                    }
+                if (dy > 0) {
+                    isSlidingToLast = true
+                } else {
+                    isSlidingToLast = false
+                }
             }
+
             override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
 
-                if(isSlidingToLast&&newState == RecyclerView.SCROLL_STATE_IDLE){
-                        val manager = recyclerView!!.getLayoutManager() as LinearLayoutManager
-                        val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()
-                        val totalItemCount = manager.itemCount
+                if (isSlidingToLast && newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    val manager = recyclerView!!.getLayoutManager() as LinearLayoutManager
+                    val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()
+                    val totalItemCount = manager.itemCount
 
-                        // 判断是否滚动到底部，并且是向下滚动
-                        if(lastVisibleItem == (totalItemCount - 1)){
-                            Log.i("ScrollListener ", "down")
-                            val previousSize=businformationBeanList.size
-                            businformationBeanList.addAll(MockData.Mock())
-                            val newSize =businformationBeanList.size
-                            for(i in previousSize..newSize)
-                                routesAdapter.notifyItemInserted(i)
-                        }
+                    // 判断是否滚动到底部，并且是向下滚动
+                    if (lastVisibleItem == (totalItemCount - 1)) {
+                        Log.i("ScrollListener ", "down")
+                        val previousSize = businformationBeanList.size
+                        businformationBeanList.addAll(MockData.Mock())
+                        val newSize = businformationBeanList.size
+                        for (i in previousSize..newSize)
+                            routesAdapter.notifyItemInserted(i)
+                    }
                 }
             }
         })
         routesAdapter.setMItemClickListener { v, position ->
-            intent = Intent(this,ReturnRouteActivity::class.java)
-            intent.putExtra(STARTLatitude,endLat)
-            intent.putExtra(STARTLongitude,endLong)
-            intent.putExtra(ENDLatitude,startLat)
-            intent.putExtra(ENDLongitude,startLong)
-            intent.putExtra(STARTName,endCity)
-            intent.putExtra(ENDName,startCity)
+            intent = Intent(this, ReturnRouteActivity::class.java)
+            intent.putExtra(STARTLatitude, endLat)
+            intent.putExtra(STARTLongitude, endLong)
+            intent.putExtra(ENDLatitude, startLat)
+            intent.putExtra(ENDLongitude, startLong)
+            intent.putExtra(STARTName, endCity)
+            intent.putExtra(ENDName, startCity)
 //            var bundle = Bundle()
 //            bundle.putSerializable("to_route",businformationBeanList.get(position))
 //            intent.putExtras(bundle)
@@ -139,8 +137,8 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
             val gson = Gson()
             val json = gson.toJson(businformationBeanList.get(position))
             prefsEditor.putString("route", json)
-            prefsEditor.putString("from_city",startCity)
-            prefsEditor.putString("to_city",endCity)
+            prefsEditor.putString("from_city", startCity)
+            prefsEditor.putString("to_city", endCity)
             prefsEditor.commit()
             startActivity(intent)
         }
