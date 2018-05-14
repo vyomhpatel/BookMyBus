@@ -9,7 +9,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RoutesPresenter(private val routesActivity: RoutesActivity) : RoutesContract.IPresenter, GetIDListener {
+class RoutesPresenter(private val routesActivity: RoutesActivity) : RoutesContract.IPresenter, GetRouteInfo {
+
 
     private val iView: RoutesContract.IView
     private val context: Context
@@ -24,16 +25,16 @@ class RoutesPresenter(private val routesActivity: RoutesActivity) : RoutesContra
     }
 
     override fun getRouteId(startLatitude: String, startLongitude: String, endLatitude: String, endLongitude: String) {
-        VolleyHelper(routesActivity).startRequest(startLatitude, startLongitude, endLatitude, endLongitude, this)
+        VolleyHelper(routesActivity).requestRoute(startLatitude, startLongitude, endLatitude, endLongitude, this)
     }
 
-    override fun getBusesForRoute(id: String) {
+    override fun getBusesForRoute(id: String,startCity:String,endCity:String) {
 
-        jApiService.getUser(id).enqueue(object : Callback<JBusByRoute> {
+        jApiService.getBusInfo(id).enqueue(object : Callback<JBusByRoute> {
             override fun onResponse(call: Call<JBusByRoute>, response: Response<JBusByRoute>) {
 
                 val jBusByRoute = response.body()
-                iView.initRecyclerView(jBusByRoute!!.businformation)
+                iView.initRecyclerView(jBusByRoute!!.businformation,startCity,endCity)
 
             }
 
@@ -44,7 +45,9 @@ class RoutesPresenter(private val routesActivity: RoutesActivity) : RoutesContra
 
     }
 
-    override fun getId(id: String) {
-        getBusesForRoute(id)
+    override fun getRouteInfo(id: String, startCity:String,endCity:String) {
+        getBusesForRoute(id,startCity,endCity)
     }
+
+
 }

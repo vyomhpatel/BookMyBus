@@ -52,9 +52,20 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.RouteViewH
             holder.itemView.setTag(position);
     }
 
+    @Override
+    public int getItemViewType(int position) {
+
+        if (busByRoutes.size() <= 0) {
+
+            return -1;
+        }
+        return super.getItemViewType(position);
+    }
+
 
     @Override
     public int getItemCount() {
+
         return busByRoutes.size();
     }
 

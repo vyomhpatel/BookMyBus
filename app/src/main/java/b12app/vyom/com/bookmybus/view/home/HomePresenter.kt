@@ -3,6 +3,9 @@ package b12app.vyom.com.bookmybus.view.home
 
 import android.app.Application
 import android.app.DatePickerDialog
+import android.content.Context
+import android.content.SharedPreferences
+import android.provider.Settings.Global.getString
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -23,12 +26,15 @@ import javax.inject.Inject
 
 class HomePresenter(homeActivity: HomeActivity) {
     public var homeActivity: HomeActivity? = homeActivity
+    var context = homeActivity
     var city: List<City.CityBean>? = null
     var adapter: ArrayAdapter<String>? = null
     var autoComplete: ArrayList<City.CityBean>? = null
     var startLocation: City.CityBean? = null
     var endLocation: City.CityBean? = null
     var flag = true
+    var mPrefs:SharedPreferences ?= context.getSharedPreferences("bmb_shared",android.content.Context.MODE_PRIVATE)
+
 
     var trie: Trie<City.CityBean>
 
@@ -119,6 +125,10 @@ class HomePresenter(homeActivity: HomeActivity) {
             override fun onClick(v: View?) {
                 DatePickerDialog(homeActivity, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                     homeActivity!!.stareDate.text = ((monthOfYear + 1).toString() + "-" + dayOfMonth + "-" + year.toString())
+                    var editor = mPrefs!!.edit()
+                    editor.putInt("start_month",monthOfYear+1)
+                    editor.putInt("start_day",dayOfMonth)
+                    editor.commit()
                     flag = true
                     homeActivity!!.searchLocation.requestFocus()
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
@@ -127,11 +137,17 @@ class HomePresenter(homeActivity: HomeActivity) {
         homeActivity!!.end.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 DatePickerDialog(homeActivity, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                    homeActivity!!.endDate.text = ((monthOfYear + 1).toString() + "-" + dayOfMonth + '-' + year.toString())
+                    homeActivity!!.endDate.text = ((monthOfYear).toString() + "-" + dayOfMonth + '-' + year.toString())
                     flag = false
                     homeActivity!!.searchLocation.requestFocus()
+                    var editor = mPrefs!!.edit()
+                    editor.putInt("end_month",monthOfYear)
+                    editor.putInt("end_day",dayOfMonth)
+                    editor.commit()
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH + 1), calendar.get(Calendar.DAY_OF_MONTH)).show()
             }
         })
+
+
     }
 }

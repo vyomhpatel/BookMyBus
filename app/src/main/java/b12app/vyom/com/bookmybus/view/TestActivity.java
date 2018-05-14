@@ -1,5 +1,6 @@
 package b12app.vyom.com.bookmybus.view;
 
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -17,15 +18,16 @@ public class TestActivity extends AppCompatActivity {
     @BindView(R.id.testFrame)
     FrameLayout testFrame;
     Toolbar tbTest;
+    private SharedPreferences mPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         tbTest=findViewById(R.id.tbTest);
+        mPreferences = getSharedPreferences(getString(R.string.shared_pref_title),MODE_PRIVATE);
+
         initToolbar();
-        ConfirmedTicketFragment confirmedTicketFragment = new ConfirmedTicketFragment();
-//        SendMail sendMail = new SendMail();
         BookTicketFragment bookTicketFragment = new BookTicketFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.testFrame,bookTicketFragment,"test").commit();
     }
@@ -34,6 +36,8 @@ public class TestActivity extends AppCompatActivity {
         tbTest.setNavigationIcon(R.drawable.back_ic);
         setSupportActionBar(tbTest);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Ahmedabad - Bombay");
+        getSupportActionBar().setTitle(mPreferences.getString("from_city","")+
+                " - "
+                +mPreferences.getString("to_city",""));
     }
 }

@@ -4,13 +4,14 @@ import android.content.Context
 
 import b12app.vyom.com.bookmybus.model.JBusByRoute
 import b12app.vyom.com.bookmybus.data.remote.*
+import b12app.vyom.com.bookmybus.model.City
 import b12app.vyom.com.bookmybus.utils.VolleyHelper
-import b12app.vyom.com.bookmybus.view.routes.GetIDListener
+import b12app.vyom.com.bookmybus.view.routes.GetRouteInfo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ReturnRoutesPresenter(private val returnRouteActivity: ReturnRouteActivity) : ReturnRoutesContract.IPresenter, GetIDListener {
+class ReturnRoutesPresenter(private val returnRouteActivity: ReturnRouteActivity) : ReturnRoutesContract.IPresenter, GetRouteInfo {
 
     private val iView: ReturnRoutesContract.IView
     private val context: Context
@@ -25,12 +26,12 @@ class ReturnRoutesPresenter(private val returnRouteActivity: ReturnRouteActivity
     }
 
     override fun getRouteId(startLatitude: String, startLongitude: String, endLatitude: String, endLongitude: String) {
-        VolleyHelper(returnRouteActivity).startRequest(startLatitude, startLongitude, endLatitude, endLongitude, this)
+        VolleyHelper(returnRouteActivity).requestRoute(startLatitude, startLongitude, endLatitude, endLongitude, this)
     }
 
     override fun getBusesForRoute(id: String) {
 
-        jApiService.getUser(id).enqueue(object : Callback<JBusByRoute> {
+        jApiService.getBusInfo(id).enqueue(object : Callback<JBusByRoute> {
             override fun onResponse(call: Call<JBusByRoute>, response: Response<JBusByRoute>) {
 
                 val jBusByRoute = response.body()
@@ -45,7 +46,7 @@ class ReturnRoutesPresenter(private val returnRouteActivity: ReturnRouteActivity
 
     }
 
-    override fun getId(id: String) {
+    override fun getRouteInfo(id: String,startCity: String, endCity:String) {
         getBusesForRoute(id)
     }
 }

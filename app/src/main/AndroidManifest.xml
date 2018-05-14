@@ -37,7 +37,9 @@
 
         </activity>
         <activity android:name=".view.routes.RoutesActivity"></activity>
-        <activity android:name=".view.TestActivity"></activity>
+        <activity android:name=".view.TestActivity">
+
+        </activity>
         <activity android:name=".view.returnroute.ReturnRouteActivity"></activity>
         <activity android:name=".view.seatpick.SeatPick">
 

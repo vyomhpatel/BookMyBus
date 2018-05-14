@@ -136,6 +136,7 @@
                     android:textSize="25sp"
                     android:gravity="center_vertical|center" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -188,6 +189,38 @@
                     android:textColor="#000000" />
             </LinearLayout>
         </LinearLayout>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            android:background="@drawable/rounded_border"
+            android:weightSum="2">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textSize="@dimen/text_reg"
+                android:textColor="#000000"
+                android:layout_weight="1"
+                android:text="Seat No:"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/text_reg"
+                android:textColor="#000000"
+                android:paddingLeft="10dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/button_bg"
+                android:id="@+id/seatNo"
+                android:text="1" />
+        </TableRow>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -225,36 +258,9 @@
                     android:background="@drawable/button_bg"
                     android:text="₹ 50" />
             </TableRow>
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="5dp"
-                android:weightSum="2">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:textSize="@dimen/text_reg"
-                    android:textColor="#000000"
-                    android:layout_weight="1"
-                    android:text="Taxes"/>
+               </LinearLayout>
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center_vertical"
-                    android:textSize="@dimen/text_reg"
-                    android:textColor="#000000"
-                    android:paddingLeft="10dp"
-                    android:background="@drawable/button_bg"
-                    android:id="@+id/cartTaxes"
-                    android:text="₹ 50" />
 
-            </TableRow>
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -275,7 +281,7 @@
                 android:layout_gravity="center_vertical"/>
 
             <Button
-                android:id="@+id/btnPlaceOrder"
+                android:id="@+id/btnBookTicket"
                 android:layout_width="100dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center_vertical|right"

@@ -17,6 +17,14 @@ import b12app.vyom.com.bookmybus.utils.*
 import b12app.vyom.com.bookmybus.view.returnroute.ReturnRouteActivity
 import com.google.android.gms.common.util.CollectionUtils.mutableListOf
 import kotlinx.android.synthetic.main.activity_journey_list.*
+import com.google.gson.Gson
+import android.R.id.edit
+import android.content.Context
+import android.content.SharedPreferences
+
+
+
+
 
 class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
     private var iPresenter: RoutesContract.IPresenter? = null
@@ -27,11 +35,17 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
     private var endLong = ""
     private var startName = ""
     private var endName = ""
+    private var mPrefs:SharedPreferences?=null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_journey_list)
 
         iPresenter = RoutesPresenter(this)
+        businformationBeanList = ArrayList<JBusByRoute.BusinformationBean>()
+
+        mPrefs = this.getSharedPreferences(getString(b12app.vyom.com.bookmybus.R.string.shared_pref_title),android.content.Context.MODE_PRIVATE)
+
          startLat= intent.getStringExtra(STARTLatitude)
          startLong = intent.getStringExtra(STARTLongitude)
          endLat = intent.getStringExtra(ENDLatitude)
@@ -58,6 +72,14 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
         return super.onOptionsItemSelected(item)
     }
 
+
+    override fun onStop() {
+        super.onStop()
+    }
+
+    override fun initRecyclerView(businformationBeanList: List<JBusByRoute.BusinformationBean>,startCity:String,endCity:String) {
+
+        routesRecyclerView!!.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     override fun initRecyclerView(incomeList: List<JBusByRoute.BusinformationBean>) {
         for(item in incomeList){
             businformationBeanList.add(item)
@@ -107,6 +129,19 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
             intent.putExtra(STARTLongitude,endLong)
             intent.putExtra(ENDLatitude,startLat)
             intent.putExtra(ENDLongitude,startLong)
+            intent.putExtra(STARTName,endCity)
+            intent.putExtra(ENDName,startCity)
+//            var bundle = Bundle()
+//            bundle.putSerializable("to_route",businformationBeanList.get(position))
+//            intent.putExtras(bundle)
+
+            val prefsEditor = mPrefs!!.edit()
+            val gson = Gson()
+            val json = gson.toJson(businformationBeanList.get(position))
+            prefsEditor.putString("route", json)
+            prefsEditor.putString("from_city",startCity)
+            prefsEditor.putString("to_city",endCity)
+            prefsEditor.commit()
             startActivity(intent)
         }
 

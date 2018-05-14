@@ -8,6 +8,6 @@ import retrofit2.http.Query;
 public interface JApiService {
 
     @GET("businfo.php")
-    Call<JBusByRoute> getUser(@Query("routeid") String routeid);
+    Call<JBusByRoute> getBusInfo(@Query("routeid") String routeid);
 
 }

@@ -6,6 +6,7 @@ interface RoutesContract {
 
     interface IView {
         fun initRecyclerView(incomeList: List<JBusByRoute.BusinformationBean>)
+        fun initRecyclerView(businformationBeanList: List<JBusByRoute.BusinformationBean>,startCity:String,endCity:String)
 
     }
 
@@ -13,6 +14,6 @@ interface RoutesContract {
 
 
         fun getRouteId(startLatitude: String, startLongitude: String, endLatitude: String, endLongitude: String)
-        fun getBusesForRoute(id: String)
+        fun getBusesForRoute(id: String,startCity:String,endCity:String)
     }
 }
