@@ -297,7 +297,7 @@
             android:layout_margin="10dp"
             android:layout_width="match_parent"
             android:layout_height="@dimen/buy_button_height"
-            android:visibility="gone" />
+             />
 
         <TextView
             android:id="@+id/tvTerms"

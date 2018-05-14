@@ -70,4 +70,5 @@ dependencies {
 
     implementation 'com.google.dagger:dagger-android-support:2.13' // Dagger 2 Android 支持包
     kapt 'com.google.dagger:dagger-compiler:2.13' // Dagger 2 注解处理
+    implementation 'com.google.android.support:wearable:+'
 }

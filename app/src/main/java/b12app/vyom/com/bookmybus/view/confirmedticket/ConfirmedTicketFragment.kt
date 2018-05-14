@@ -1,6 +1,9 @@
 package b12app.vyom.com.bookmybus.view.confirmedticket
 
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -30,6 +33,8 @@ import butterknife.ButterKnife
 
 import android.support.constraint.Constraints.TAG
 import android.support.design.widget.Snackbar
+import android.support.v4.app.NotificationCompat
+import android.support.v4.content.ContextCompat
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import b12app.vyom.com.bookmybus.model.JBusByRoute
@@ -129,6 +134,7 @@ class ConfirmedTicketFragment : Fragment(), View.OnClickListener {
 
 
         setData()
+        setBundleData()
 
         event_container1!!.setOnClickListener(this)
         event_container2!!.setOnClickListener(this)
@@ -142,12 +148,36 @@ class ConfirmedTicketFragment : Fragment(), View.OnClickListener {
 
             ivQRCode!!.setImageBitmap(bitmap)
             tvTicketTS!!.text = currenttime
+
+
+
+            notifyUser(bitmap)
+
             sendMessage()
         } catch (e: WriterException) {
             e.printStackTrace()
         }
 
         return ticketConfirmedView
+    }
+
+    private fun setBundleData() {
+        var bundle = arguments
+        tvTicketAmt!!.text = "₹ "+ bundle!!.getString("amount","")
+    }
+
+    private fun notifyUser(bitmap: Bitmap?) {
+
+        val notification = NotificationCompat.Builder(activity!!.applicationContext)
+                .setContentTitle("Wear Notification")
+                .setSmallIcon(R.drawable.event_ic)
+                .setContentText("Ticket Confirmed")
+                .extend(NotificationCompat.WearableExtender().setHintShowBackgroundOnly(true))
+                .build()
+        val notificationManager = activity!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+        val notificationId = 1
+        notificationManager!!.notify(notificationId, notification)
+
     }
 
     private fun setData() {
@@ -169,6 +199,7 @@ class ConfirmedTicketFragment : Fragment(), View.OnClickListener {
             tvIBArrival!!.text = fromBusInfo!!.dropingtime.toString()
             val duration2 = fromBusInfo!!.journyduration.toString()
             tvOBDuration!!.text = duration2.substring(1, 8) + " HR"
+
 
             //clearing sharedpreferences for the next user.
             clearSharedPreference()
