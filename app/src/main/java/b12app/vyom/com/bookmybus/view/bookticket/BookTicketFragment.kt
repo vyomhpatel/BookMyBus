@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 
 import com.google.android.gms.common.api.ApiException
@@ -58,6 +59,7 @@ class BookTicketFragment : Fragment(), View.OnClickListener {
         var tvCheckIBDate = bookTicketView.findViewById(R.id.tvCheckIBDate) as TextView
         var tvCheckOBMonth = bookTicketView.findViewById(R.id.tvCheckOBMonth) as TextView
         var tvCheckIBMonth = bookTicketView.findViewById(R.id.tvCheckIBMonth) as TextView
+        var etCheckTotalNotax:TextView = bookTicketView.findViewById(R.id.etCheckTotalNotax)
 
         var btnBookTicket = bookTicketView.findViewById(R.id.btnBookTicket) as Button
         btnBookTicket.setOnClickListener(this)
@@ -91,7 +93,8 @@ class BookTicketFragment : Fragment(), View.OnClickListener {
             tvCheckIBDuration.text =  duration2.substring(1, 8) + " HR"
         }
         val total = Integer.valueOf(toBusInfo!!.fare) + Integer.valueOf(fromBusInfo!!.fare)
-        tvCartTotal!!.text = total.toString()
+        etCheckTotalNotax!!.text = "₹" +total.toString()
+        tvCartTotal!!.text = "₹ "+ total.toString()
 
         mGooglePayButton = bookTicketView.findViewById(R.id.googlepay_button)
 
