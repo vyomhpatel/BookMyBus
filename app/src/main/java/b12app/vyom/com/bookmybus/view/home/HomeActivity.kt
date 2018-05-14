@@ -62,12 +62,14 @@ class HomeActivity : FragmentActivity(), View.OnClickListener {
         profile!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 Toast.makeText(this@HomeActivity, "profile", Toast.LENGTH_LONG).show()
-                resideMenu!!.closeMenu()
+                val technology = Technology()
+                technology.show(getSupportFragmentManager(), "technology")
             }
         })
         settings!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 Toast.makeText(this@HomeActivity, "setting", Toast.LENGTH_LONG).show()
+
                 resideMenu!!.closeMenu()
             }
         })
