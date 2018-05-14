@@ -37,4 +37,16 @@
     <string name="go">GO!</string>
     <string name="destination">destination</string>
     <string name="start">start</string>
+    <string name="technologies_used">
+        Technologies Used:\n\n
+        Retrofit \n
+        Volley \n
+        Face Detection \n
+        Face Recognization \n
+        Bar code generation\n
+        Dagger 2 \n
+        Google calender \n
+        Lazy loading \n
+        Java email \n
+    </string>
 </resources>
