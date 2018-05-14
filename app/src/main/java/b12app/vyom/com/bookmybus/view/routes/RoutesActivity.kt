@@ -19,6 +19,14 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import kotlinx.android.synthetic.main.activity_journey_list.*
+import com.google.gson.Gson
+import android.R.id.edit
+import android.content.Context
+import android.content.SharedPreferences
+
+
+
+
 
 class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
 
@@ -32,14 +40,16 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
     private var endLong = ""
     private var startName = ""
     private var endName = ""
+    private var mPrefs:SharedPreferences?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_journey_list)
 
-        unbinder = ButterKnife.bind(this)
         iPresenter = RoutesPresenter(this)
         businformationBeanList = ArrayList<JBusByRoute.BusinformationBean>()
+
+        mPrefs = this.getSharedPreferences(getString(b12app.vyom.com.bookmybus.R.string.shared_pref_title),android.content.Context.MODE_PRIVATE)
 
          startLat= intent.getStringExtra(STARTLatitude)
          startLong = intent.getStringExtra(STARTLongitude)
@@ -70,21 +80,9 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
 
     override fun onStop() {
         super.onStop()
-        unbinder!!.unbind()
     }
 
-    override fun initRecyclerView(businformationBeanList: List<JBusByRoute.BusinformationBean>) {
-        //        JBusByRoute.BusinformationBean businformationBean = new JBusByRoute.BusinformationBean("1","111",
-        //                "AC","9:00","2 HR","$ 150","8:30 PM","11:00 PM");
-        //        JBusByRoute.BusinformationBean businformationBean2 = new JBusByRoute.BusinformationBean("2","111",
-        //                "AC","10:00","2 HR","$ 150","8:30 PM","11:00 PM");
-        //
-        //
-        //        businformationBeanList.add(businformationBean);
-        //        businformationBeanList.add(businformationBean2);
-
-        //        busByRoute = new JBusByRoute();
-        //        busByRoute.setBusinformation(businformationBeanList);
+    override fun initRecyclerView(businformationBeanList: List<JBusByRoute.BusinformationBean>,startCity:String,endCity:String) {
 
         routesRecyclerView!!.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         val routesAdapter = RoutesAdapter(this, businformationBeanList)
@@ -96,6 +94,19 @@ class RoutesActivity : AppCompatActivity(), RoutesContract.IView {
             intent.putExtra(STARTLongitude,endLong)
             intent.putExtra(ENDLatitude,startLat)
             intent.putExtra(ENDLongitude,startLong)
+            intent.putExtra(STARTName,endCity)
+            intent.putExtra(ENDName,startCity)
+//            var bundle = Bundle()
+//            bundle.putSerializable("to_route",businformationBeanList.get(position))
+//            intent.putExtras(bundle)
+
+            val prefsEditor = mPrefs!!.edit()
+            val gson = Gson()
+            val json = gson.toJson(businformationBeanList.get(position))
+            prefsEditor.putString("route", json)
+            prefsEditor.putString("from_city",startCity)
+            prefsEditor.putString("to_city",endCity)
+            prefsEditor.commit()
             startActivity(intent)
         }
 

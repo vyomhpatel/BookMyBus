@@ -2,6 +2,7 @@ package b12app.vyom.com.bookmybus.model;
 
 import com.google.gson.Gson;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class JBusByRoute {
@@ -19,7 +20,7 @@ public class JBusByRoute {
         this.businformation = businformation;
     }
 
-    public static class BusinformationBean {
+    public static class BusinformationBean implements Serializable {
 
 
         public BusinformationBean(String busid, String busregistrationno, String bustype, String busdeparturetime, String journyduration, String fare, String boardingtime, String dropingtime) {

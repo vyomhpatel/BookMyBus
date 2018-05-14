@@ -37,4 +37,9 @@
     <string name="go">GO!</string>
     <string name="destination">destination</string>
     <string name="start">start</string>
+    <string name="booked">This Seat is Booked</string>
+    <string name="reserved">This seat is Reserved</string>
+    <string name="shared_pref_title">bmb_shared</string>
+    <string name="event">Event</string>
+    <string name="greeting">Hoping to see you on the board. to book more tickets using BookMyBus use: https://www.bookmybus.com</string>
 </resources>

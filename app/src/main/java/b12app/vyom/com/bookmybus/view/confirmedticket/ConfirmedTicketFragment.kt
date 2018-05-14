@@ -4,6 +4,7 @@ package b12app.vyom.com.bookmybus.view.confirmedticket
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.AsyncTask
@@ -29,7 +30,9 @@ import butterknife.ButterKnife
 
 import android.support.constraint.Constraints.TAG
 import android.support.design.widget.Snackbar
+import android.widget.LinearLayout
 import android.widget.ScrollView
+import b12app.vyom.com.bookmybus.model.JBusByRoute
 import b12app.vyom.com.bookmybus.utils.Mail
 import com.google.api.client.http.HttpTransport
 import com.google.api.client.json.JsonFactory
@@ -38,27 +41,49 @@ import com.google.api.client.util.DateTime
 import com.google.api.services.calendar.model.Event
 import com.google.api.services.calendar.model.EventAttendee
 import com.google.api.services.calendar.model.EventDateTime
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.confirmed_ticket.*
 import java.sql.Time
+import java.text.DateFormatSymbols
 
 import java.util.*
 import javax.mail.AuthenticationFailedException
 import javax.mail.MessagingException
 import kotlin.collections.ArrayList
 
-class ConfirmedTicketFragment : Fragment() {
+class ConfirmedTicketFragment : Fragment(), View.OnClickListener {
+    override fun onClick(v: View?) {
+        setCalenderEvent()
+    }
 
-//    internal var tvConfirmedTicketNo: TextView? = null
-//    internal var ivQRCode: ImageView? = null
-//    internal var tvPersonName: TextView? = null
-//    internal var tvTicketMonth: TextView? = null
-//    internal var tvTicketDate: TextView? = null
-//    internal var tvTicketDeparture: TextView? = null
-//    internal var tvTicketArrival: TextView? = null
-//    internal var tvTicketDuration: TextView? = null
-//    internal var tvTicketAmt: TextView? = null
-//    internal var tvTicketTS: TextView? = null
+    var tvConfirmedTicketNo: TextView? = null
+    var ivQRCode: ImageView? = null
+    var tvPersonName: TextView? = null
+    var tvTicketMonth: TextView? = null
+    var tvOBDate: TextView? = null
+    var tvIBDate: TextView? = null
+    var tvOBMonth: TextView? = null
+    var tvIBMonth: TextView? = null
+    var tvOBDeparture: TextView? = null
+    var tvOBArrival: TextView? = null
+    var tvOBDuration: TextView? = null
+    var tvIBDeparture: TextView? = null
+    var tvIBArrival: TextView? = null
+    var tvIBDuration: TextView? = null
+    var tvTicketAmt: TextView? = null
+    var tvTicketTS: TextView? = null
     var ticketConfirmedView: View? = null
+    var event_container1:LinearLayout?=null
+    var event_container2:LinearLayout?=null
+    var random:Random ?= null
+    var mPrefs:SharedPreferences?=null
+    var start_month = 0
+    var end_month = 0
+    var start_day = 0
+    var end_day = 0
+    var year = 2018
+    private var toBusInfo: JBusByRoute.BusinformationBean? = null
+    private var fromBusInfo: JBusByRoute.BusinformationBean? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         ticketConfirmedView = inflater.inflate(R.layout.confirmed_ticket, container, false)
@@ -68,23 +93,94 @@ class ConfirmedTicketFragment : Fragment() {
         Log.i(TAG, "confirmed ticket: $currenttime")
         val multiFormatWriter = MultiFormatWriter()
 
-        val tvperson = ticketConfirmedView!!.findViewById(R.id.tvPersonName) as TextView
-        val ivQR = ticketConfirmedView!!.findViewById(R.id.ivQRCode) as ImageView
-        tvperson.text="Vyomkumar Patel"
+        mPrefs = activity!!.getSharedPreferences("bmb_shared",Context.MODE_PRIVATE)
+
+        tvPersonName = ticketConfirmedView!!.findViewById(R.id.tvPersonName) as TextView
+        ivQRCode = ticketConfirmedView!!.findViewById(R.id.ivQRCode) as ImageView
+        event_container1 = ticketConfirmedView!!.findViewById(R.id.event_container1)
+        event_container2 = ticketConfirmedView!!.findViewById(R.id.event_container2)
+        tvConfirmedTicketNo = ticketConfirmedView!!.findViewById(R.id.tvConfirmedTicketNo)
+        tvTicketAmt = ticketConfirmedView!!.findViewById(R.id.tvTicketAmt)
+        tvOBArrival = ticketConfirmedView!!.findViewById(R.id.tvOBArrival)
+        tvOBDeparture = ticketConfirmedView!!.findViewById(R.id.tvOBDeparture)
+        tvOBDate = ticketConfirmedView!!.findViewById(R.id.tvOBDate)
+        tvOBMonth = ticketConfirmedView!!.findViewById(R.id.tvOBMonth)
+        tvIBMonth = ticketConfirmedView!!.findViewById(R.id.tvIBMonth)
+        tvOBDuration = ticketConfirmedView!!.findViewById(R.id.tvOBDuration)
+        tvIBDate = ticketConfirmedView!!.findViewById(R.id.tvIBDate)
+        tvIBArrival = ticketConfirmedView!!.findViewById(R.id.tvIBArrival)
+        tvIBDeparture = ticketConfirmedView!!.findViewById(R.id.tvIBDeparture)
+        tvIBDuration = ticketConfirmedView!!.findViewById(R.id.tvIBDuration)
+        tvTicketTS = ticketConfirmedView!!.findViewById(R.id.tvTicketTS)
+        tvTicketAmt = ticketConfirmedView!!.findViewById(R.id.tvTicketAmt)
+
+
+
+        start_day = mPrefs!!.getInt("start_day",1)
+        tvOBDate!!.text = start_day.toString()
+
+        end_day = mPrefs!!.getInt("end_day",1)
+        tvIBDate!!.text = end_day.toString()
+
+        start_month = mPrefs!!.getInt("start_month",1)
+        tvOBMonth!!.text = getMonthForInt(start_month)
+        start_day = mPrefs!!.getInt("end_month",1)
+        tvIBMonth!!.text = getMonthForInt(mPrefs!!.getInt("end_month",6))
+
+
+        setData()
+
+        event_container1!!.setOnClickListener(this)
+        event_container2!!.setOnClickListener(this)
+
+        tvPersonName!!.text="Vyomkumar Patel"
 
         try {
-            val bitMatrix = multiFormatWriter.encode(currenttime, BarcodeFormat.QR_CODE, 200, 200)
+            val bitMatrix = multiFormatWriter.encode(currenttime+" for "+tvPersonName!!.text.toString(), BarcodeFormat.QR_CODE, 200, 200)
             val barcodeEncoder = BarcodeEncoder()
             val bitmap = barcodeEncoder.createBitmap(bitMatrix)
 
-            ivQR.setImageBitmap(bitmap)
+            ivQRCode!!.setImageBitmap(bitmap)
+            tvTicketTS!!.text = currenttime
             sendMessage()
-            setCalenderEvent()
         } catch (e: WriterException) {
             e.printStackTrace()
         }
 
         return ticketConfirmedView
+    }
+
+    private fun setData() {
+
+        val gson = Gson()
+        val route = mPrefs!!.getString("route", "")
+        val return_route = mPrefs!!.getString("return_route", "")
+        toBusInfo = gson.fromJson<JBusByRoute.BusinformationBean>(route, JBusByRoute.BusinformationBean::class.java)
+        fromBusInfo = gson.fromJson<JBusByRoute.BusinformationBean>(return_route, JBusByRoute.BusinformationBean::class.java)
+
+        if (toBusInfo != null && fromBusInfo != null) {
+            Log.i("gson", toBusInfo!!.boardingtime.toString())
+            tvOBDeparture!!.text = toBusInfo!!.boardingtime.toString()
+            tvOBArrival!!.text = toBusInfo!!.dropingtime.toString()
+            val duration1 = toBusInfo!!.journyduration.toString()
+            tvOBDuration!!.text = duration1.substring(1, 8) + " HR"
+
+            tvIBDeparture!!.text = fromBusInfo!!.boardingtime.toString()
+            tvIBArrival!!.text = fromBusInfo!!.dropingtime.toString()
+            val duration2 = fromBusInfo!!.journyduration.toString()
+            tvOBDuration!!.text = duration2.substring(1, 8) + " HR"
+
+            //clearing sharedpreferences for the next user.
+            clearSharedPreference()
+        }
+
+
+
+    }
+
+    private fun clearSharedPreference() {
+        var editor = mPrefs!!.edit()
+        editor.clear().commit()
     }
 
 
@@ -96,8 +192,8 @@ class ConfirmedTicketFragment : Fragment() {
         intent.setData(CalendarContract.Events.CONTENT_URI)
         intent.putExtra(CalendarContract.Events.TITLE,"Calender Test")
         intent.putExtra(CalendarContract.Events.EVENT_LOCATION,"Ahemdabad")
-        val start = GregorianCalendar(2018,5,8)
-        val end = GregorianCalendar(2018,5,8)
+        val start = GregorianCalendar(2018,start_month,start_day)
+        val end = GregorianCalendar(2018,end_month,end_day)
         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,start.timeInMillis)
         intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,end.timeInMillis)
         startActivity(intent)
@@ -111,7 +207,8 @@ class ConfirmedTicketFragment : Fragment() {
         sendEmailAsyncTask.activity = activity
         sendEmailAsyncTask.mail = Mail(getString(R.string.mail_from_username), getString(R.string.mail_from_p))
         sendEmailAsyncTask.mail!!._from = getString(R.string.mail_from_username)
-        sendEmailAsyncTask.mail!!.body = getString(R.string.mail_msg)
+        sendEmailAsyncTask.mail!!.body = getString(R.string.mail_msg)+" "+getMonthForInt(start_month)+" "+start_day+", 2018 from "+mPrefs!!.getString("from_city","") +" to " +mPrefs!!.getString("to_city","") +" "+
+                getString(R.string.greeting)
         sendEmailAsyncTask.mail!!._to = recipients
         sendEmailAsyncTask.mail!!._subject = getString(R.string.mail_sub)
         sendEmailAsyncTask.execute()
@@ -152,6 +249,16 @@ class ConfirmedTicketFragment : Fragment() {
             }
 
         }
+    }
+
+    fun getMonthForInt(m: Int): String {
+        var month = "invalid"
+        val dfs = DateFormatSymbols()
+        val months = dfs.getMonths()
+        if (m >= 0 && m <= 11) {
+            month = months[m]
+        }
+        return month
     }
 
 

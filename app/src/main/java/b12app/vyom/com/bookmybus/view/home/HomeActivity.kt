@@ -40,6 +40,7 @@ class HomeActivity : FragmentActivity(), View.OnClickListener {
         val homePresenter = HomePresenter(this)
         homePresenter.requestCities()
 
+
     }
 
     fun initDraw() {
