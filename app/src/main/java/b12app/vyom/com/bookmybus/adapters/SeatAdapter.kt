@@ -16,18 +16,18 @@ import b12app.vyom.com.bookmybus.R.id.seatItem
 import b12app.vyom.com.bookmybus.utils.isBooked
 import b12app.vyom.com.bookmybus.utils.isReserved
 import b12app.vyom.com.bookmybus.view.seatpick.FragmentSeatPicker
+import java.util.*
+import kotlin.collections.ArrayList
 
-class SeatAdapter(private var states: List<Int>,private val context: Context) : BaseAdapter() {
+class SeatAdapter(private var states: List<Int>,private val context: Context, private val howManySeats:Int) : BaseAdapter() {
     //should empty 2,7,12
 
-    fun getSeatAdapterContext():Context{
-        return context
-    }
+
     var fragmentSeatPicker:FragmentSeatPicker?=null
     var seatLine = 2
     //4,9,14
     var seatEnd = 5
-
+    var queue= LinkedList<Holder>()
     override fun getItem(position: Int): Int {
         return 0
     }
@@ -58,7 +58,6 @@ class SeatAdapter(private var states: List<Int>,private val context: Context) : 
             holder = v.tag as Holder
         }
 //        if(seatNumber>=(states.size-seatLine)/(seatEnd+1)-seatLine-1) seatNumber++
-
         holder.numberTv.text = index.toString()
 
         holder.state = states[index]
@@ -85,27 +84,36 @@ class SeatAdapter(private var states: List<Int>,private val context: Context) : 
                 if (holder.isClicked) {
                     //then cancel
                     holder.isClicked = false
+                    queue.remove(holder)
                     holder.seatImg.setImageResource(R.drawable.regular)
                     Log.i("SeatAdpater cancel", holder.numberTv.text.toString());
+                    callbackQueuq()
                 } else {
                     //then click
                     holder.isClicked = true
+                    while(queue.size>=howManySeats){
+                        val temp=queue.pop()
+                        temp.seatImg.setImageResource(R.drawable.regular)
+                        temp.isClicked=false
+                    }
+                    queue.add(holder)
                     holder.seatImg.setImageResource(R.drawable.booked)
                     Log.i("SeatAdpater click", holder.numberTv.text.toString());
+                    callbackQueuq()
                 }
+
+                Log.i("queue ",queue.size.toString())
             }
         })
-
-        v.setOnLongClickListener(object :View.OnLongClickListener {
-            override fun onLongClick(v: View?): Boolean {
-                fragmentSeatPicker!!.requestSeat(holder.numberTv.text.toString())
-
-                return true
-            }
-
-        })
-
         return v
+    }
+
+    fun callbackQueuq(){
+        val resultSeats=mutableListOf<String>()
+        for(i in queue){
+            resultSeats.add(i.numberTv.text.toString())
+        }
+        fragmentSeatPicker!!.requestSeat(resultSeats)
     }
 
     private fun getIndexByPosition(position: Int): Int {
@@ -115,7 +123,6 @@ class SeatAdapter(private var states: List<Int>,private val context: Context) : 
     }
 
     class Holder(v: View) {
-
         var numberTv: TextView
         var seatImg: ImageView
         var isClicked = false

@@ -36,6 +36,9 @@ class HomeActivity : FragmentActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home2)
+        var intent=getIntent()
+        var uri=intent.data
+        
         initDraw()
         val homePresenter = HomePresenter(this)
         homePresenter.requestCities()

@@ -8,8 +8,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
-
+    <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
@@ -30,34 +29,34 @@
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <!-- on click of the link the activity should get launched. -->
+                <!--<action android:name="android.intent.action.VIEW" />-->
+                <!--<category android:name="android.intent.category.BROWSABLE" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+                    <action android:name="android.intent.action.MAIN" />
+                    <category android:name="android.intent.category.LAUNCHER" />
                 <data
                     android:host="www.bookmybus.com"
-                    android:scheme="http" />
+                    android:scheme="https" />
                 <!-- what kind of data you're dealing with and who is the host -->
                 <data
                     android:host="vyom"
                     android:scheme="deeplinking" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.facerecognition.FaceRecognition">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".view.facerecognition.FaceRecognition"
+            android:screenOrientation="landscape">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
-        <activity android:name=".view.routes.RoutesActivity"></activity>
-        <activity android:name=".view.TestActivity">
 
+        <activity android:name=".view.routes.RoutesActivity"></activity>
+        <activity android:name=".view.TestActivity"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".view.returnroute.ReturnRouteActivity"></activity>
-        <activity android:name=".view.seatpick.SeatPick">
 
-        </activity>
     </application>
 
 </manifest>

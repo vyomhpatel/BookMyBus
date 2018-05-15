@@ -2,8 +2,6 @@ package b12app.vyom.com.bookmybus.facerecognize
 
 import android.content.Context
 import android.hardware.Camera
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
 import android.util.AttributeSet
 import android.util.Log
 import b12app.vyom.com.bookmybus.R
@@ -14,9 +12,6 @@ import org.opencv.objdetect.CascadeClassifier
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import android.opengl.ETC1.getWidth
-import android.opengl.ETC1.getHeight
-import android.graphics.Bitmap
 
 
 

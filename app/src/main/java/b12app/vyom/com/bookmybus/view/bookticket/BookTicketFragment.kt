@@ -241,8 +241,12 @@ class BookTicketFragment : Fragment(), View.OnClickListener {
         AutoResolveHelper.resolveTask(futurePaymentData, activity!!, LOAD_PAYMENT_DATA_REQUEST_CODE)
     }
 
-    fun getSeatDetails(seatno: String) {
-        seatNo!!.text = "S " + seatno
+    fun getSeatDetails(seatnos: MutableList<String>) {
+        var s=""
+        for(i in seatnos){
+            s+=i+" "
+        }
+        seatNo!!.text = "S " + s
 
 
     }
