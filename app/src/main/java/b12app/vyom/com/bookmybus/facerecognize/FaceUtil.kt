@@ -4,24 +4,17 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.text.TextUtils
+import android.util.Log
 import org.opencv.android.Utils
 import org.opencv.core.Mat
 import org.opencv.core.Rect
 import org.opencv.core.Size
 import org.opencv.imgcodecs.Imgcodecs
-import org.opencv.imgcodecs.Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE
 import org.opencv.imgproc.Imgproc
-import org.opencv.imgproc.Imgproc.CV_COMP_CORREL
-import org.opencv.imgproc.Imgproc.CV_COMP_INTERSECT
+
 import java.io.File
 
-
-import org.opencv.core.Core;
 import org.opencv.core.CvType;
-import org.opencv.core.MatOfFloat;
-import org.opencv.core.MatOfInt;
-import org.opencv.core.Point;
-import org.opencv.core.Scalar;
 
 object FaceUtil {
 
@@ -37,15 +30,27 @@ object FaceUtil {
      * @return 保存是否成功
      */
     fun saveImage(context: Context, image: Mat, rect: Rect, fileName: String): Boolean {
-        // 原图置灰
-        val grayMat = Mat()
-        Imgproc.cvtColor(image, grayMat, Imgproc.COLOR_BGR2GRAY)
         // 把检测到的人脸重新定义大小后保存成文件
-        val sub = grayMat.submat(rect)
+        val sub = image.submat(rect)
         val mat = Mat()
         val size = Size(100.0, 100.0)
         Imgproc.resize(sub, mat, size)
         return Imgcodecs.imwrite(getFilePath(context, fileName), mat)
+    }
+    fun matToBitmap(image: Mat) : Bitmap{
+        try{
+            val bmp = Bitmap.createBitmap(100,100, Bitmap.Config.ARGB_8888);
+            Utils.matToBitmap(image, bmp);
+            return bmp
+        }catch (e:Exception){ Log.i("matToBitmap ","conver fail")}
+       return Bitmap.createBitmap(100,100, Bitmap.Config.ARGB_8888);
+    }
+    fun cutMat(image:Mat, rect:Rect):Mat{
+        val subMat = image.submat(rect)
+        val size = Size(100.0, 100.0)
+        val resizeMat = Mat()
+        Imgproc.resize(subMat, resizeMat, size)
+        return resizeMat
     }
 
     /**
@@ -94,18 +99,10 @@ object FaceUtil {
      * @param fileName2 人脸特征
      * @return 相似度
      */
-    fun compare(context: Context, fileName1: String, fileName2: String): Double {
+    fun compare(mat1: Mat, mat2: Mat): Double {
         try {
-            val pathFile1 = getFilePath(context, fileName1)
-            val pathFile2 = getFilePath(context, fileName2)
-            val mBitmap1= BitmapFactory.decodeFile(pathFile1)
-            val mBitmap2=BitmapFactory.decodeFile(pathFile2)
-            val mat1=Mat()
-            val mat2=Mat()
             val matGrey1=Mat()
             val matGrey2=Mat()
-            Utils.bitmapToMat(mBitmap1, mat1);
-            Utils.bitmapToMat(mBitmap2, mat2);
             Imgproc.cvtColor(mat1, matGrey1, Imgproc.COLOR_BGR2GRAY);
             Imgproc.cvtColor(mat2, matGrey2, Imgproc.COLOR_BGR2GRAY);
             return comPareHist(matGrey1, matGrey2);

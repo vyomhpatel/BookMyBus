@@ -7,43 +7,51 @@ import android.graphics.Bitmap
 import kotlinx.android.synthetic.main.activity_face_recognition.*
 import android.Manifest;
 import android.content.Intent
-import android.util.Log;
-import android.view.View;
+import android.util.Log
 import android.widget.Toast
 import b12app.vyom.com.bookmybus.facerecognize.FaceUtil
 import b12app.vyom.com.bookmybus.facerecognize.OnFaceDetectorListener
 import b12app.vyom.com.bookmybus.utils.PermissionsManager
 import b12app.vyom.com.bookmybus.view.home.HomeActivity
+import org.opencv.android.Utils
+
 
 import org.opencv.core.Mat
 import org.opencv.core.Rect
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import java.util.concurrent.RejectedExecutionException
 
 class FaceRecognition : AppCompatActivity(), OnFaceDetectorListener {
-    private val TAG = "FaceRecognition";
-    private val FACE1 = "face1"
-    private val FACE2 = "face2"
-    private var isGettingFace = false
-    private var mBitmapFace1: Bitmap? = null
-    private var mBitmapFace2: Bitmap? = null
-    private var cmp: Double = 0.toDouble()
-    private var mPermissionsManager:PermissionsManager?=null
+    private val TAG = "similarity ";
+    private val FACE = "face"
+    private var isGettingFace = 0
+    private var mBitmapFace: Bitmap? = null
+    private var faceOriginal: Mat? = null
+    private var cmp = 0.0
+    private var pool:ExecutorService?=null
+    private var mPermissionsManager: PermissionsManager? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_face_recognition)
 
         faceRecognition!!.setOnFaceDetectorListener(this)
         faceRecognition!!.loadOpenCV(this)
+        mBitmapFace = FaceUtil.getImage(this, FACE)
+        face1.setImageBitmap(mBitmapFace)
+        //sign up
 
-        // 抓取一张人脸
-        bn_get_face.setOnClickListener { isGettingFace = true }
+        pool = Executors.newFixedThreadPool(2)
+        face1.setOnClickListener {
+            isGettingFace = 1
+        }
+
+
         // 切换摄像头（如果有多个）
         switch_camera.setOnClickListener {
             // 切换摄像头
             val isSwitched = faceRecognition!!.switchCamera()
             Toast.makeText(applicationContext, if (isSwitched) "摄像头切换成功" else "摄像头切换失败", Toast.LENGTH_SHORT).show()
-        }
-        gotoMain.setOnClickListener{
-            startActivity(Intent(this,HomeActivity::class.java))
         }
         // 动态权限检查器
         mPermissionsManager = object : PermissionsManager(this@FaceRecognition) {
@@ -70,6 +78,7 @@ class FaceRecognition : AppCompatActivity(), OnFaceDetectorListener {
         }
     }
 
+
     override fun onResume() {
         super.onResume()
         // 检查权限
@@ -83,38 +92,42 @@ class FaceRecognition : AppCompatActivity(), OnFaceDetectorListener {
      * @param rect Rect
      */
     override fun onFace(mat: Mat, rect: Rect) {
-        if (isGettingFace) {
-            if (null == mBitmapFace1 || null != mBitmapFace2) {
-                mBitmapFace1 = null
-                mBitmapFace2 = null
-                // 保存人脸信息并显示
-                FaceUtil.saveImage(this, mat, rect, FACE1)
-                mBitmapFace1 = FaceUtil.getImage(this, FACE1)
-                cmp = 0.0
-            } else {
-                FaceUtil.saveImage(this, mat, rect, FACE2)
-                mBitmapFace2 = FaceUtil.getImage(this, FACE2)
-
-                // 计算相似度
-                cmp = FaceUtil.compare(this, FACE1, FACE2)
-                Log.i(TAG, "onFace: 相似度 : $cmp")
-            }
+        if (isGettingFace != 0) {
+            isGettingFace = 0
+            FaceUtil.saveImage(this, mat, rect, FACE)
+            faceOriginal = FaceUtil.cutMat(mat, rect)
+            val bitmap = FaceUtil.matToBitmap(FaceUtil.cutMat(mat, rect))
             runOnUiThread {
-                if (null == mBitmapFace1) {
-                    face1?.setImageResource(R.mipmap.ic_contact_picture)
-                } else {
-                    face1?.setImageBitmap(mBitmapFace1)
+                face1?.setImageBitmap(bitmap)
+            }
+        }
+        if (faceOriginal == null) {
+            faceOriginal = Mat()
+            Utils.bitmapToMat(mBitmapFace, faceOriginal);
+        }
+        if(faceOriginal!=null){
+            val compareThread = Thread(object:Runnable{
+                override fun run() {
+                    cmp = FaceUtil.compare(faceOriginal!!, FaceUtil.cutMat(mat, rect))
+                    if (cmp >= 0.72) {
+                        pool?.shutdown();
+                        gotoMainActivity()
+                        finish()
+                    }
                 }
-                if (null == mBitmapFace2) {
-                    face2?.setImageResource(R.mipmap.ic_contact_picture)
-                } else {
-                    face2?.setImageBitmap(mBitmapFace2)
-                }
-                samilarity?.setText(String.format("samilarity :  %.2f", cmp*100) + "%")
+            })
+            try{
+                pool?.execute(compareThread)
+            }catch (e: RejectedExecutionException){
+                Log.e(TAG,"already matched")
             }
 
-            isGettingFace = false
         }
+
+    }
+
+    private fun gotoMainActivity() {
+        startActivity(Intent(this@FaceRecognition, HomeActivity::class.java))
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

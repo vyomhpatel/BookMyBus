@@ -5,5 +5,4 @@ import org.opencv.core.Rect
 
 interface OnFaceDetectorListener {
     abstract fun onFace(mat: Mat, rect: Rect)
-
 }
