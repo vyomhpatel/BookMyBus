@@ -109,7 +109,7 @@ class FaceRecognition : AppCompatActivity(), OnFaceDetectorListener {
             val compareThread = Thread(object:Runnable{
                 override fun run() {
                     cmp = FaceUtil.compare(faceOriginal!!, FaceUtil.cutMat(mat, rect))
-                    if (cmp >= 0.6 ) {
+                    if (cmp >= 0.72) {
                         pool?.shutdown();
                         gotoMainActivity()
                         finish()
