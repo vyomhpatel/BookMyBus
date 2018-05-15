@@ -48,7 +48,7 @@ class HomeActivity : FragmentActivity(), View.OnClickListener {
 
     fun initDraw() {
         resideMenu = ResideMenu(this);
-        resideMenu!!.setBackground(R.drawable.background)
+        resideMenu!!.setBackground(R.drawable.bmb_ic)
         resideMenu!!.attachToActivity(this)
 
         home = ResideMenuItem(this, R.drawable.home, "Home");

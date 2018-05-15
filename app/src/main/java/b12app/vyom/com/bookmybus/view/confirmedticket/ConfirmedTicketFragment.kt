@@ -12,6 +12,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Environment
 import android.provider.CalendarContract
 import android.support.v4.app.Fragment
 import android.util.Log
@@ -48,6 +49,8 @@ import com.google.api.services.calendar.model.EventAttendee
 import com.google.api.services.calendar.model.EventDateTime
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.confirmed_ticket.*
+import java.io.File
+import java.io.FileOutputStream
 import java.sql.Time
 import java.text.DateFormatSymbols
 
@@ -150,7 +153,7 @@ class ConfirmedTicketFragment : Fragment(), View.OnClickListener {
             tvTicketTS!!.text = currenttime
 
 
-
+            saveImage(bitmap)
             notifyUser(bitmap)
 
             sendMessage()
@@ -163,7 +166,7 @@ class ConfirmedTicketFragment : Fragment(), View.OnClickListener {
 
     private fun setBundleData() {
         var bundle = arguments
-        tvTicketAmt!!.text = "₹ "+ bundle!!.getString("amount","")
+        tvTicketAmt!!.text = bundle!!.getString("amount","")
     }
 
     private fun notifyUser(bitmap: Bitmap?) {
@@ -201,8 +204,7 @@ class ConfirmedTicketFragment : Fragment(), View.OnClickListener {
             tvOBDuration!!.text = duration2.substring(1, 8) + " HR"
 
 
-            //clearing sharedpreferences for the next user.
-            clearSharedPreference()
+
         }
 
 
@@ -221,15 +223,26 @@ class ConfirmedTicketFragment : Fragment(), View.OnClickListener {
 
        val  intent =  Intent(Intent.ACTION_INSERT)
         intent.setData(CalendarContract.Events.CONTENT_URI)
-        intent.putExtra(CalendarContract.Events.TITLE,"Calender Test")
-        intent.putExtra(CalendarContract.Events.EVENT_LOCATION,"Ahemdabad")
+        intent.putExtra(CalendarContract.Events.TITLE,"BookMyBus Travel Event")
+        intent.putExtra(CalendarContract.Events.EVENT_LOCATION,mPrefs!!.getString("from_city",""))
         val start = GregorianCalendar(2018,start_month,start_day)
         val end = GregorianCalendar(2018,end_month,end_day)
-        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,start.timeInMillis)
-        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,end.timeInMillis)
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,toBusInfo!!.boardingtime)
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,toBusInfo!!.dropingtime)
         startActivity(intent)
 
 
+    }
+
+    private fun saveImage(bitmap: Bitmap?){
+        var root = activity!!.applicationContext.filesDir.toString() as String
+        var fname = "bmb.png"
+        var file = File(root,fname)
+
+            var fos = FileOutputStream(file)
+            bitmap!!.compress(Bitmap.CompressFormat.PNG,90,fos)
+            fos.flush()
+            fos.close()
     }
 
     private fun sendMessage() {
@@ -238,11 +251,14 @@ class ConfirmedTicketFragment : Fragment(), View.OnClickListener {
         sendEmailAsyncTask.activity = activity
         sendEmailAsyncTask.mail = Mail(getString(R.string.mail_from_username), getString(R.string.mail_from_p))
         sendEmailAsyncTask.mail!!._from = getString(R.string.mail_from_username)
-        sendEmailAsyncTask.mail!!.body = getString(R.string.mail_msg)+" "+getMonthForInt(start_month)+" "+start_day+", 2018 from "+mPrefs!!.getString("from_city","") +" to " +mPrefs!!.getString("to_city","") +" "+
-                getString(R.string.greeting)
+        sendEmailAsyncTask.mail!!.body = getString(R.string.mail_msg)+" "+getMonthForInt(start_month)+" "+start_day+", 2018 from "+mPrefs!!.getString("from_city","") +" to " +mPrefs!!.getString("to_city","") +". "+
+                getString(R.string.greeting)+"\n                   Team BookMyBus"
         sendEmailAsyncTask.mail!!._to = recipients
         sendEmailAsyncTask.mail!!._subject = getString(R.string.mail_sub)
+        sendEmailAsyncTask.mail!!.addAttachment(activity!!.applicationContext.filesDir.toString()+"/bmb.png")
         sendEmailAsyncTask.execute()
+        //clearing sharedpreferences for the next user.
+        clearSharedPreference()
     }
 
     fun displayMessage(message: String) {

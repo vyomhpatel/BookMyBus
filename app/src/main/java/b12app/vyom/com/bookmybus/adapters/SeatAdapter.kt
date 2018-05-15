@@ -62,11 +62,11 @@ class SeatAdapter(private var states: List<Int>,private val context: Context, pr
 
         holder.state = states[index]
         if (holder.state == isBooked) {
-            holder.seatImg.setImageResource(R.drawable.booked)
+            holder.seatImg.setImageResource(R.drawable.seat_normal_selected)
         } else if (holder.state == isReserved) {
-            holder.seatImg.setImageResource(R.drawable.reserved)
+            holder.seatImg.setImageResource(R.drawable.seat_normal_booked)
         } else {
-            holder.seatImg.setImageResource(R.drawable.regular)
+            holder.seatImg.setImageResource(R.drawable.seat_normal)
         }
 
         v.setOnClickListener(object : View.OnClickListener {
@@ -85,7 +85,7 @@ class SeatAdapter(private var states: List<Int>,private val context: Context, pr
                     //then cancel
                     holder.isClicked = false
                     queue.remove(holder)
-                    holder.seatImg.setImageResource(R.drawable.regular)
+                    holder.seatImg.setImageResource(R.drawable.seat_normal)
                     Log.i("SeatAdpater cancel", holder.numberTv.text.toString());
                     callbackQueuq()
                 } else {
@@ -93,11 +93,11 @@ class SeatAdapter(private var states: List<Int>,private val context: Context, pr
                     holder.isClicked = true
                     while(queue.size>=howManySeats){
                         val temp=queue.pop()
-                        temp.seatImg.setImageResource(R.drawable.regular)
+                        temp.seatImg.setImageResource(R.drawable.seat_normal)
                         temp.isClicked=false
                     }
                     queue.add(holder)
-                    holder.seatImg.setImageResource(R.drawable.booked)
+                    holder.seatImg.setImageResource(R.drawable.seat_normal_selected)
                     Log.i("SeatAdpater click", holder.numberTv.text.toString());
                     callbackQueuq()
                 }

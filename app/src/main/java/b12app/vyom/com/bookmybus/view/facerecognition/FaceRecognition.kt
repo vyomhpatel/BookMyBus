@@ -101,7 +101,7 @@ class FaceRecognition : AppCompatActivity(), OnFaceDetectorListener {
                 face1?.setImageBitmap(bitmap)
             }
         }
-        if (faceOriginal == null) {
+        if (faceOriginal == null&&mBitmapFace!=null) {
             faceOriginal = Mat()
             Utils.bitmapToMat(mBitmapFace, faceOriginal);
         }

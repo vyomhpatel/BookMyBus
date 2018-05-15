@@ -1,11 +1,8 @@
 package b12app.vyom.com.bookmybus.view.home
 
 
-import android.app.Application
 import android.app.DatePickerDialog
-import android.content.Context
 import android.content.SharedPreferences
-import android.provider.Settings.Global.getString
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -19,10 +16,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.widget.Toast
 import android.widget.AdapterView
-import b12app.vyom.com.bookmybus.utils.dagger2.DaggerMyComponent
 import kotlinx.android.synthetic.main.activity_home2.*
 import java.util.*
-import javax.inject.Inject
 
 class HomePresenter(homeActivity: HomeActivity) {
     public var homeActivity: HomeActivity? = homeActivity
@@ -45,7 +40,7 @@ class HomePresenter(homeActivity: HomeActivity) {
             override fun onItemClick(adapterView: AdapterView<*>, view: View, i: Int, l: Long) {
                 if (flag) {
                     startLocation = autoComplete?.get(i)
-                    homeActivity!!.start.text = startLocation?.cityname
+                    homeActivity!!.from_date.text = startLocation?.cityname
                 } else {
                     endLocation = autoComplete?.get(i)
                     homeActivity!!.end.text = endLocation?.cityname
@@ -121,10 +116,10 @@ class HomePresenter(homeActivity: HomeActivity) {
 
     fun setDatePicker() {
         var calendar = Calendar.getInstance()
-        homeActivity!!.start.setOnClickListener(object : View.OnClickListener {
+        homeActivity!!.from_date.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 DatePickerDialog(homeActivity, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                    homeActivity!!.stareDate.text = ((monthOfYear + 1).toString() + "-" + dayOfMonth + "-" + year.toString())
+                    homeActivity!!.departure_date.text = ((monthOfYear + 1).toString() + "-" + dayOfMonth + "-" + year.toString())
                     var editor = mPrefs!!.edit()
                     editor.putInt("start_month",monthOfYear+1)
                     editor.putInt("start_day",dayOfMonth)
@@ -137,7 +132,7 @@ class HomePresenter(homeActivity: HomeActivity) {
         homeActivity!!.end.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 DatePickerDialog(homeActivity, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                    homeActivity!!.endDate.text = ((monthOfYear).toString() + "-" + dayOfMonth + '-' + year.toString())
+                    homeActivity!!.arrival_date.text = ((monthOfYear).toString() + "-" + dayOfMonth + '-' + year.toString())
                     flag = false
                     homeActivity!!.searchLocation.requestFocus()
                     var editor = mPrefs!!.edit()

@@ -9,4 +9,5 @@
     <dimen name="buy_button_min_width">200dp</dimen>
     <dimen name="txt18">18sp</dimen>
     <dimen name="txt15">15sp</dimen>
+    <dimen name="txt16">16sp</dimen>
 </resources>

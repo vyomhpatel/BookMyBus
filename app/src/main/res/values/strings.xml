@@ -26,7 +26,7 @@
     <string name="mail_from_p">WelcomeVyom</string>
     <string name="outbound">OUTBOUND</string>
     <string name="recipient">mr.vyompatel@gmail.com</string>
-    <string name="mail_msg">You have been Confirmed for the Journey.</string>
+    <string name="mail_msg">Thank you for giving us a chance to serve you as your travel partner. You will take the bus on </string>
     <string name="mail_sub">Ticket Confirmation For BookMyBus</string>
     <string name="googlepay_status_unavailable" translatable="false">Unfortunately, Google Pay is not available on this phone.</string>
     <string name="googlepay_status_checking" translatable="false">Checking if Google Pay is available...</string>
@@ -53,6 +53,7 @@
     <string name="reserved">This seat is Reserved</string>
     <string name="shared_pref_title">bmb_shared</string>
     <string name="event">Event</string>
-    <string name="greeting">Hoping to see you on the board. to book more tickets using BookMyBus use: https://www.bookmybus.com</string>
+    <string name="greeting">Hoping to see you on the board. To book more tickets using BookMyBus use: https://www.bookmybus.com</string>
     <string name="comfirm">comfirm</string>
+    <string name="arrival_date">Arrival Date</string>
 </resources>
